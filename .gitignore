@@ -1,0 +1,14 @@
+# vim
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+
+# python
+*.pyc
+*.pyo
+*.log
+*.pot
+__pycache__

@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Test 1",
+        "answers": [
+            {
+                "answer": "42",
+                "question": "Everything?",
+                "double": false
+            },
+            {
+                "answer": "43",
+                "question": "Not everything?",
+                "double": true
+            }
+        ]
+    },
+    {
+        "name": "Test 2",
+        "answers": [
+            {
+                "answer": "21",
+                "question": "Half truth?",
+                "double": false
+            },
+            {
+                "answer": "22",
+                "question": "Half truth + 1?",
+                "double": true
+            }
+        ]
+    }
+]
