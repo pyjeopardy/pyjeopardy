@@ -1,5 +1,6 @@
 from PySide import QtGui
 from pyjeopardy.game import Game, Round
+from .widgets import JeopardyRoundsWidget
 
 class JeopardyMain(QtGui.QMainWindow):
     def __init__(self):
@@ -28,6 +29,21 @@ class JeopardyMain(QtGui.QMainWindow):
         exitAction.triggered.connect(self.close)
         fileMenu.addAction(exitAction)
 
+        # window
+        window = QtGui.QWidget(self)
+
+        # rounds widget
+        self.roundsWidget = JeopardyRoundsWidget(game=self._game)
+
+        # layout
+        hbox = QtGui.QHBoxLayout(window)
+        hbox.addWidget(self.roundsWidget)
+
+        window.setLayout(hbox)
+
+        # set content
+        self.setCentralWidget(window)
+
         # window title
         self.setWindowTitle('PyJeopardy')
 
@@ -42,3 +58,5 @@ class JeopardyMain(QtGui.QMainWindow):
             round.load(fname)
 
             self._game.add_round(round)
+
+            self.roundsWidget.update()
