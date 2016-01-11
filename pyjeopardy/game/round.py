@@ -85,14 +85,17 @@ class Round:
         if "question" not in json:
             raise ParserError("Question for answer is missing")
 
+        if "points" not in json:
+            raise ParserError("Points for answer are missing")
+
         answer_double = False
-        if "double" in json:
-            if type(json["double"]) == bool:
-                answer_double = json["double"]
+        if "doublejeopardy" in json:
+            if type(json["doublejeopardy"]) == bool:
+                answer_double = json["doublejeopardy"]
             else:
-                raise ParserError("Double field in answer must be "
+                raise ParserError("Doublejeopardy field in answer must be "
                                   "true or false")
 
         # create answer
         return Answer(answer_type, json["answer"], json["question"],
-                      answer_double)
+                      answer_double, json["points"])
