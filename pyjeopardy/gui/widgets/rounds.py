@@ -29,4 +29,4 @@ class JeopardyRoundsWidget(QtGui.QWidget):
         self.listWidget.clear()
 
         for round in self._game.rounds:
-            QtGui.QListWidgetItem(round.name, self.listWidget)
+            self.listWidget.addItem(QtGui.QListWidgetItem(round.name))

@@ -9,6 +9,9 @@ class JeopardyPlayersWidget(QtGui.QWidget):
 
         super(JeopardyPlayersWidget, self).__init__(*args, **kwargs)
 
+        # list
+        self.listWidget = QtGui.QListWidget(self)
+
         # title
         title = QtGui.QLabel('Players')
 
@@ -19,13 +22,17 @@ class JeopardyPlayersWidget(QtGui.QWidget):
         # layout
         hbox = QtGui.QVBoxLayout()
         hbox.addWidget(title)
+        hbox.addWidget(self.listWidget)
         hbox.addWidget(addButton)
 
         self.setLayout(hbox)
 
     def addPlayer(self):
         dialog = JeopardyAddPlayerDialog(self._game, self)
-        dialog.show()
+        dialog.exec_()
+        self.listWidget.clear()
+        for player in self._game.players:
+            self.listWidget.addItem(QtGui.QListWidgetItem(player.name))
 
 class JeopardyAddPlayerDialog(QtGui.QDialog):
     def __init__(self, game, parent=None):
