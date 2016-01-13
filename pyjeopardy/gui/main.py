@@ -1,6 +1,7 @@
 from PySide import QtGui
 from pyjeopardy.game import Game, Round
-from .widgets import JeopardyRoundsWidget, JeopardyPlayersWidget
+from .widgets import JeopardyRoundsWidget, JeopardyPlayersWidget, \
+    JeopardyGameWidget
 
 class JeopardyMain(QtGui.QMainWindow):
     def __init__(self):
@@ -29,29 +30,32 @@ class JeopardyMain(QtGui.QMainWindow):
         exitAction.triggered.connect(self.close)
         fileMenu.addAction(exitAction)
 
-        # window
-        window = QtGui.QWidget(self)
+        # settings window
+        self.settingsWindow = QtGui.QWidget()
 
         # rounds widget
-        self.roundsWidget = JeopardyRoundsWidget(game=self._game)
+        self.roundsWidget = JeopardyRoundsWidget(game=self._game, main=self)
 
         # players widget
         self.playersWidget = JeopardyPlayersWidget(game=self._game)
 
         # layout
-        hbox = QtGui.QHBoxLayout(window)
+        hbox = QtGui.QHBoxLayout(self.settingsWindow)
         hbox.addWidget(self.roundsWidget)
         hbox.addWidget(self.playersWidget)
 
-        window.setLayout(hbox)
+        self.settingsWindow.setLayout(hbox)
+
+        # game window
+        self.gameWindow = JeopardyGameWidget(game=self._game)
 
         # set content
-        self.setCentralWidget(window)
+        self.setCentralWidget(self.settingsWindow)
 
         # window title
         self.setWindowTitle('PyJeopardy')
 
-        # show window
+        # show
         self.show()
 
     def add_round(self):
@@ -64,3 +68,6 @@ class JeopardyMain(QtGui.QMainWindow):
             self._game.add_round(round)
 
             self.roundsWidget.update()
+
+    def start_game(self):
+        self.setCentralWidget(self.gameWindow)

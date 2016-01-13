@@ -3,6 +3,7 @@ from PySide import QtGui
 class JeopardyRoundsWidget(QtGui.QWidget):
     def __init__(self, *args, **kwargs):
         self._game = kwargs.pop('game')
+        self._main = kwargs.pop('main')
 
         super(JeopardyRoundsWidget, self).__init__(*args, **kwargs)
 
@@ -14,6 +15,7 @@ class JeopardyRoundsWidget(QtGui.QWidget):
 
         # play button
         playButton = QtGui.QPushButton("Play")
+        playButton.clicked.connect(self._main.start_game)
 
         # layout
         hbox = QtGui.QVBoxLayout()
