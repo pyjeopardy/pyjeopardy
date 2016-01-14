@@ -30,6 +30,10 @@ class JeopardyPlayersWidget(QtGui.QWidget):
     def addPlayer(self):
         dialog = JeopardyAddPlayerDialog(self._game, self)
         dialog.exec_()
+
+        self.update()
+
+    def update(self):
         self.listWidget.clear()
         for player in self._game.players:
             self.listWidget.addItem(QtGui.QListWidgetItem(player.name))
