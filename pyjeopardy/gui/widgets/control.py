@@ -18,8 +18,9 @@ class JeopardyControlWidget(QtGui.QWidget):
         self.playersWidget = JeopardyPlayersWidget(game=self._game)
 
         # play button
-        playButton = QtGui.QPushButton("Play")
-        playButton.clicked.connect(self._main.start_game)
+        self.playButton = QtGui.QPushButton("Play")
+        self.playButton.setEnabled(False)
+        self.playButton.clicked.connect(self._main.start_game)
 
         # layout: place rounds and players horizontally
         hbox = QtGui.QHBoxLayout()
@@ -29,6 +30,12 @@ class JeopardyControlWidget(QtGui.QWidget):
         # layout: play button on the bottom
         vbox = QtGui.QVBoxLayout(self)
         vbox.addLayout(hbox)
-        vbox.addWidget(playButton)
+        vbox.addWidget(self.playButton)
 
         self.setLayout(vbox)
+
+    def enable_play(self):
+        self.playButton.setEnabled(True)
+
+    def get_selected_round(self):
+        return self.roundsWidget.get_selected_round()

@@ -11,9 +11,26 @@ class JeopardyMain(QtGui.QMainWindow):
         self.initUI()
 
     def initUI(self):
-        #
         # menu
-        #
+        self._add_menu()
+
+        # widgets
+        self.controlWidget = JeopardyControlWidget(game=self._game, main=self)
+
+        # window content
+        self.content = QtGui.QStackedWidget(self);
+        self.content.addWidget(self.controlWidget)
+        self.content.setCurrentWidget(self.controlWidget)
+
+        self.setCentralWidget(self.content)
+
+        # window title
+        self.setWindowTitle('PyJeopardy')
+
+        # show
+        self.show()
+
+    def _add_menu(self):
         menubar = self.menuBar()
 
         # menu -> game
@@ -42,27 +59,12 @@ class JeopardyMain(QtGui.QMainWindow):
         saveConfigAction = QtGui.QAction('&Save', self)
         configMenu.addAction(saveConfigAction)
 
-        #
-        # widgets
-        #
-        self.controlWidget = JeopardyControlWidget(game=self._game, main=self)
-
-        # window content
-        self.content = QtGui.QStackedWidget(self);
-        self.content.addWidget(self.controlWidget)
-        self.content.setCurrentWidget(self.controlWidget)
-
-        self.setCentralWidget(self.content)
-
-        # window title
-        self.setWindowTitle('PyJeopardy')
-
-        # show
-        self.show()
-
     def start_game(self):
+        # get currently selected round
+        cur_round = self.controlWidget.get_selected_round()
+
         # create widget
-        gameWidget = JeopardyGameWidget(game=self._game)
+        gameWidget = JeopardyGameWidget(game=self._game, round=cur_round)
         self.content.addWidget(gameWidget)
         self.content.setCurrentWidget(gameWidget)
 

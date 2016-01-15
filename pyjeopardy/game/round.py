@@ -47,8 +47,6 @@ class Round:
             category_obj = self._parse_category(category)
             self.categories.append(category_obj)
 
-        print(repr(self.categories))
-
     def _parse_category(self, json):
         if type(json) != dict:
             raise ParserError("Invalid format, expected dict inside "

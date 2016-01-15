@@ -88,6 +88,4 @@ class JeopardyAddPlayerDialog(QtGui.QDialog):
 
         self._game.add_player(player)
 
-        print(repr(self._game.players))
-
         self.close()

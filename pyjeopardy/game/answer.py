@@ -16,3 +16,6 @@ class Answer:
 
     def is_double(self):
         return self._double
+
+    def get_points(self):
+        return self._points

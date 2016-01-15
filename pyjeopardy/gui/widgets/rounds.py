@@ -11,6 +11,7 @@ class JeopardyRoundsWidget(QtGui.QWidget):
 
         # list
         self.listWidget = QtGui.QListWidget(self)
+        self.listWidget.currentItemChanged.connect(self.round_changed)
 
         # title
         title = QtGui.QLabel('Rounds')
@@ -45,3 +46,17 @@ class JeopardyRoundsWidget(QtGui.QWidget):
             self._game.add_round(round)
 
             self.update()
+
+    def round_changed(self):
+        self.parent().enable_play()
+
+    def get_selected_round(self):
+        if not self.listWidget.currentItem():
+            return None
+
+        pos = self.listWidget.currentRow()
+
+        if pos >= len(self._game.rounds):
+            return None
+
+        return self._game.rounds[pos]
