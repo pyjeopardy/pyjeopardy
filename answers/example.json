@@ -7,14 +7,12 @@
                 {
                     "answer": "42",
                     "question": "Everything?",
-                    "doublejeopardy": false,
-                    "points": 100
+                    "doublejeopardy": false
                 },
                 {
                     "answer": "43",
                     "question": "Not everything?",
-                    "doublejeopardy": true,
-                    "points": 200
+                    "doublejeopardy": true
                 }
             ]
         },
@@ -24,14 +22,12 @@
                 {
                     "answer": "21",
                     "question": "Half truth?",
-                    "doublejeopardy": false,
-                    "points": 100
+                    "doublejeopardy": false
                 },
                 {
                     "answer": "22",
                     "question": "Half truth + 1?",
-                    "doublejeopardy": true,
-                    "points": 200
+                    "doublejeopardy": true
                 }
             ]
         }

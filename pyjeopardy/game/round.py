@@ -65,13 +65,15 @@ class Round:
         if "answers" not in json:
             raise ParserError("Answers for category are missing")
 
+        points = 0
         for answer in json["answers"]:
-            answer_obj = self._parse_answer(answer)
+            points = points + 100
+            answer_obj = self._parse_answer(answer, points)
             category_obj.add(answer_obj)
 
         return category_obj
 
-    def _parse_answer(self, json):
+    def _parse_answer(self, json, points):
         if type(json) != dict:
             raise ParserError("Invalid answer format, expected "
                               "dict")
@@ -85,9 +87,6 @@ class Round:
         if "question" not in json:
             raise ParserError("Question for answer is missing")
 
-        if "points" not in json:
-            raise ParserError("Points for answer are missing")
-
         answer_double = False
         if "doublejeopardy" in json:
             if type(json["doublejeopardy"]) == bool:
@@ -98,4 +97,4 @@ class Round:
 
         # create answer
         return Answer(answer_type, json["answer"], json["question"],
-                      answer_double, json["points"])
+                      answer_double, points)
