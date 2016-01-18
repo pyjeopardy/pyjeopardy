@@ -12,3 +12,6 @@ Session.vim
 *.log
 *.pot
 __pycache__
+
+# project
+/hardware/*.pdf
