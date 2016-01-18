@@ -28,4 +28,6 @@ class JeopardyGameWidget(QtGui.QWidget):
 
             for answer_num,answer in enumerate(cat.answers):
                 tmp = QtGui.QPushButton(str(answer.get_points()))
+                tmp.setSizePolicy(QtGui.QSizePolicy.Expanding,
+                                  QtGui.QSizePolicy.Expanding)
                 self.answersGrid.addWidget(tmp, answer_num+1, cat_num)
