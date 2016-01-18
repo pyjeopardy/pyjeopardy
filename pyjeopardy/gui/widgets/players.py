@@ -57,6 +57,8 @@ class JeopardyAddPlayerDialog(QtGui.QDialog):
 
         # save
         saveButton = QtGui.QPushButton("Ok")
+        saveButton.setDefault(True);
+        saveButton.setAutoDefault(True);
         saveButton.clicked.connect(self.add)
 
         # cancel
