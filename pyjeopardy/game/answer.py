@@ -14,6 +14,11 @@ class Answer:
     def is_text(self):
         return self._type == Answer.TEXT
 
+    def get_text(self):
+        if self.is_text():
+            return self._data
+        return None
+
     def is_double(self):
         return self._double
 

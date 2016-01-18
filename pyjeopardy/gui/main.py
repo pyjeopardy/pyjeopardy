@@ -64,7 +64,8 @@ class JeopardyMain(QtGui.QMainWindow):
         cur_round = self.controlWidget.get_selected_round()
 
         # create widget
-        gameWidget = JeopardyGameWidget(game=self._game, round=cur_round)
+        gameWidget = JeopardyGameWidget(game=self._game, round=cur_round,
+                                        main=self)
         self.content.addWidget(gameWidget)
         self.content.setCurrentWidget(gameWidget)
 
@@ -77,6 +78,10 @@ class JeopardyMain(QtGui.QMainWindow):
 
         # update menu
         self.abortGameAction.setEnabled(False)
+
+    def show_answer(self, answerwidget):
+        self.content.addWidget(answerwidget)
+        self.content.setCurrentWidget(answerwidget)
 
     def _close_cur_widget(self):
         tmp = self.content.currentWidget()
