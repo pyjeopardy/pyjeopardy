@@ -28,6 +28,11 @@
                     "answer": "22",
                     "question": "Half truth + 1?",
                     "doublejeopardy": true
+                },
+                {
+                    "answer": "23",
+                    "question": "Half truth + 2?",
+                    "doublejeopardy": false
                 }
             ]
         }
