@@ -17,7 +17,7 @@ class JeopardyPlayersWidget(QtGui.QWidget):
 
         # play button
         addButton = QtGui.QPushButton("Add")
-        addButton.clicked.connect(self.addPlayer)
+        addButton.clicked.connect(self.add_player)
 
         # layout
         hbox = QtGui.QVBoxLayout()
@@ -27,11 +27,12 @@ class JeopardyPlayersWidget(QtGui.QWidget):
 
         self.setLayout(hbox)
 
-    def addPlayer(self):
+    def add_player(self):
         dialog = JeopardyAddPlayerDialog(self._game, self)
         dialog.exec_()
 
         self.update()
+        self.parent().update_play_status()
 
     def update(self):
         self.listWidget.clear()

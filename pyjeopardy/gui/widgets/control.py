@@ -34,8 +34,12 @@ class JeopardyControlWidget(QtGui.QWidget):
 
         self.setLayout(vbox)
 
-    def enable_play(self):
-        self.playButton.setEnabled(True)
+    def update_play_status(self):
+        if self.roundsWidget.get_selected_round() and \
+            len(self._game.players) != 0:
+            self.playButton.setEnabled(True)
+        else:
+            self.playButton.setEnabled(False)
 
     def get_selected_round(self):
         return self.roundsWidget.get_selected_round()

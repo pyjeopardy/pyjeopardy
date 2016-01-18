@@ -48,7 +48,7 @@ class JeopardyRoundsWidget(QtGui.QWidget):
             self.update()
 
     def round_changed(self):
-        self.parent().enable_play()
+        self.parent().update_play_status()
 
     def get_selected_round(self):
         if not self.listWidget.currentItem():
