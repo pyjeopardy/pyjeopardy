@@ -1,6 +1,6 @@
 from PySide import QtGui
 
-from pyjeopardy.game import Round
+from pyjeopardy.game import Round, ParserError
 
 class JeopardyRoundsWidget(QtGui.QWidget):
     def __init__(self, *args, **kwargs):
@@ -41,11 +41,21 @@ class JeopardyRoundsWidget(QtGui.QWidget):
 
         if fname:
             round = Round()
-            round.load(fname)
+            try:
+                round.load(fname)
+            except ParserError as e:
+                errorBox = QtGui.QMessageBox(QtGui.QMessageBox.Critical,
+                    "Error loading round", "Cannot load JSON file")
+                errorBox.setInformativeText(e.value)
+                errorBox.exec_()
+                return
 
             self._game.add_round(round)
 
             self.update()
+
+            # select newly added item
+            self.listWidget.setCurrentRow(self.listWidget.count()-1)
 
     def round_changed(self):
         self.parent().update_play_status()
