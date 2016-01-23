@@ -1,7 +1,7 @@
 from PySide import QtGui
 from pyjeopardy.game import Game
 from .control import JeopardyControlWidget
-from .game import JeopardyGameWidget
+from .game import JeopardyGameWidget, JeopardyAnswerWidget
 
 class JeopardyMain(QtGui.QMainWindow):
     def __init__(self):
@@ -83,6 +83,12 @@ class JeopardyMain(QtGui.QMainWindow):
     def show_answer(self, answerwidget):
         self.content.addWidget(answerwidget)
         self.content.setCurrentWidget(answerwidget)
+
+    def close_answer(self):
+        tmp = self.content.currentWidget()
+
+        if type(tmp) == JeopardyAnswerWidget:
+            self._close_cur_widget()
 
     def _close_cur_widget(self):
         tmp = self.content.currentWidget()
