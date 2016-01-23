@@ -1,4 +1,5 @@
 from copy import deepcopy
+from importlib import import_module
 
 from pyjeopardy import config
 
@@ -13,6 +14,13 @@ class Game:
         # add keyboard as hardware
         self.keyboard = Keyboard()
         self.hardware.append(self.keyboard)
+
+        # add hardware given in config
+        for mod_name,class_name in config.HARDWARE:
+            mod = import_module(mod_name)
+            hw = getattr(mod, class_name)
+
+            self.hardware.append(hw())
 
         self.free_colors = deepcopy(config.COLORS)
 

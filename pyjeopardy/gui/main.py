@@ -1,6 +1,6 @@
 from PySide import QtGui
-from pyjeopardy.game import Game
-from .control import JeopardyControlWidget
+from pyjeopardy.game import Game, HardwareError
+from .control import JeopardyControlWidget, HardwareDialog
 from .game import JeopardyGameWidget, JeopardyAnswerWidget
 
 class JeopardyMain(QtGui.QMainWindow):
@@ -31,6 +31,7 @@ class JeopardyMain(QtGui.QMainWindow):
         # show
         self.show()
 
+
     def _add_menu(self):
         menubar = self.menuBar()
 
@@ -43,9 +44,13 @@ class JeopardyMain(QtGui.QMainWindow):
         self.abortGameAction.setEnabled(False)
         gameMenu.addAction(self.abortGameAction)
 
+        # menu -> game -> hardware
+        hardwareAction = QtGui.QAction('&Hardware', self)
+        hardwareAction.triggered.connect(self.configure_hardware)
+        gameMenu.addAction(hardwareAction)
+
         # menu -> game -> exit
         exitAction = QtGui.QAction(QtGui.QIcon('exit.png'), '&Exit', self)
-        exitAction.setShortcut('Ctrl+Q')
         exitAction.triggered.connect(self.close)
         gameMenu.addAction(exitAction)
 
@@ -89,6 +94,10 @@ class JeopardyMain(QtGui.QMainWindow):
 
         if type(tmp) == JeopardyAnswerWidget:
             self._close_cur_widget()
+
+    def configure_hardware(self):
+        dialog = HardwareDialog(self._game, self)
+        dialog.exec_()
 
     def _close_cur_widget(self):
         tmp = self.content.currentWidget()

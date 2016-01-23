@@ -33,3 +33,5 @@ def get_color_name(color):
 NUM_PLAYERS_IN_ROW = 4
 
 ANSWER_FONT_SIZE = 40
+
+HARDWARE = [('pyjeopardy.hardware.buzzer', 'Buzzer')]

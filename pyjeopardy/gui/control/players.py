@@ -70,7 +70,8 @@ class AddPlayerDialog(QtGui.QDialog):
         self.hardwareWidget = QtGui.QComboBox()
         self.hardwareWidget.currentIndexChanged.connect(self.update_keys)
         for hw in self._game.hardware:
-            self.hardwareWidget.addItem(hw.name)
+            if hw.active:
+                self.hardwareWidget.addItem(hw.name)
 
         self.update_keys()
 

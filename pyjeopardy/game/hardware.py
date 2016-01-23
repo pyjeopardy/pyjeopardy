@@ -1,11 +1,15 @@
 class Hardware:
-    KEYBOARD = 1
-
-    def __init__(self, hwtype, name):
+    def __init__(self, name):
         self.name = name
-        self.type = hwtype
+
+        self.active = False
+
+        self.configdialog = None
 
         self.all_keys = {}
+
+    def init(self):
+        pass
 
     def get_key_for_name(self, keyname):
         for key, name in self.all_keys.items():
@@ -13,9 +17,21 @@ class Hardware:
                 return key
         return None
 
+
+class HardwareError(Exception):
+    def __init__(self, hardware, error):
+        self.hardware = hardware
+        self.error = error
+
+    def __str__(self):
+        return "{} {}".format(self.hardware.name, self.error)
+
+
 class Keyboard(Hardware):
     def __init__(self):
-        super(Keyboard, self).__init__(Hardware.KEYBOARD, "Keyboard")
+        super(Keyboard, self).__init__("Keyboard")
 
-        for key in range(65, 90):
+        self.active = True
+
+        for key in range(65, 91):  # A - Z
             self.all_keys[key] = chr(key)
