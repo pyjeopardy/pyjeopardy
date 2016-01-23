@@ -1,6 +1,7 @@
 from PySide import QtGui
 
 from .answer import JeopardyAnswerWidget
+from .points import JeopardyPointsWidget
 
 class JeopardyGameWidget(QtGui.QWidget):
     def __init__(self, *args, **kwargs):
@@ -17,10 +18,14 @@ class JeopardyGameWidget(QtGui.QWidget):
         self.answersGrid = QtGui.QGridLayout()
         self._draw_grid()
 
+        # players with points
+        self.points = JeopardyPointsWidget(game=self._game)
+
         # layout
         hbox = QtGui.QVBoxLayout()
         hbox.addWidget(title)
         hbox.addLayout(self.answersGrid)
+        hbox.addWidget(self.points)
 
         self.setLayout(hbox)
 

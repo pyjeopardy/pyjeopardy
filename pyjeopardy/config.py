@@ -28,3 +28,6 @@ def get_color_name(color):
         if col[1] == color:
             return col[0]
     return None
+
+
+NUM_PLAYERS_IN_ROW = 4

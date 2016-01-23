@@ -16,38 +16,44 @@ class JeopardyPlayersWidget(QtGui.QWidget):
         title = QtGui.QLabel('Players')
 
         # play button
-        addButton = QtGui.QPushButton("Add")
-        addButton.clicked.connect(self.add_player)
+        self.addButton = QtGui.QPushButton("Add")
+        self.addButton.clicked.connect(self.add_player)
 
         # layout
-        hbox = QtGui.QVBoxLayout()
-        hbox.addWidget(title)
-        hbox.addWidget(self.listWidget)
-        hbox.addWidget(addButton)
+        vbox = QtGui.QVBoxLayout()
+        vbox.addWidget(title)
+        vbox.addWidget(self.listWidget)
+        vbox.addWidget(self.addButton)
 
-        self.setLayout(hbox)
+        self.setLayout(vbox)
 
     def add_player(self):
-        dialog = JeopardyAddPlayerDialog(self._game, self)
+        dialog = AddPlayerDialog(self._game, self)
         dialog.exec_()
 
         self.update()
         self.parent().update_play_status()
 
     def update(self):
+        # update list
         self.listWidget.clear()
         for player in self._game.players:
             self.listWidget.addItem(QtGui.QListWidgetItem(player.name))
 
-class JeopardyAddPlayerDialog(QtGui.QDialog):
+        # update "Add" button
+        if len(self._game.free_colors) == 0:
+            self.addButton.setEnabled(False)
+
+class AddPlayerDialog(QtGui.QDialog):
     def __init__(self, game, parent=None):
-        super(JeopardyAddPlayerDialog, self).__init__(parent)
+        super(AddPlayerDialog, self).__init__(parent)
 
         self._game = game
 
         # name
         nameLabel = QtGui.QLabel("Name")
         self.nameWidget = QtGui.QLineEdit()
+        self.nameWidget.textEdited.connect(self.update_save_button)
 
         # color
         colorLabel = QtGui.QLabel("Color")
@@ -56,10 +62,11 @@ class JeopardyAddPlayerDialog(QtGui.QDialog):
             self.colorWidget.addItem(col[0])
 
         # save
-        saveButton = QtGui.QPushButton("Ok")
-        saveButton.setDefault(True);
-        saveButton.setAutoDefault(True);
-        saveButton.clicked.connect(self.add)
+        self.saveButton = QtGui.QPushButton("Ok")
+        self.saveButton.setDefault(True);
+        self.saveButton.setAutoDefault(True);
+        self.saveButton.setEnabled(False)
+        self.saveButton.clicked.connect(self.add)
 
         # cancel
         cancelButton = QtGui.QPushButton("Cancel")
@@ -75,7 +82,7 @@ class JeopardyAddPlayerDialog(QtGui.QDialog):
         grid.addWidget(self.colorWidget, 2, 1)
 
         grid.addWidget(cancelButton, 3, 0)
-        grid.addWidget(saveButton, 3, 1)
+        grid.addWidget(self.saveButton, 3, 1)
 
         self.setLayout(grid)
 
@@ -92,3 +99,9 @@ class JeopardyAddPlayerDialog(QtGui.QDialog):
         self._game.add_player(player)
 
         self.close()
+
+    def update_save_button(self, text):
+        if text:
+            self.saveButton.setEnabled(True)
+        else:
+            self.saveButton.setEnabled(False)
