@@ -1,6 +1,7 @@
 from PySide import QtGui
 from pyjeopardy.game import Game
-from .widgets import JeopardyControlWidget, JeopardyGameWidget
+from .control import JeopardyControlWidget
+from .game import JeopardyGameWidget
 
 class JeopardyMain(QtGui.QMainWindow):
     def __init__(self):
