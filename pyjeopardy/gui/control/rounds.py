@@ -37,7 +37,8 @@ class JeopardyRoundsWidget(QtGui.QWidget):
             self.listWidget.addItem(QtGui.QListWidgetItem(round.name))
 
     def add_round(self):
-        fname, _ = QtGui.QFileDialog.getOpenFileName(self, 'Open file')
+        fname, _ = QtGui.QFileDialog.getOpenFileName(self, 'Open file',
+            filter='JSON files (*.json);;All files (*)')
 
         if fname:
             round = Round()
