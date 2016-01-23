@@ -1,5 +1,6 @@
 from PySide.QtGui import QColor
 
+# available colors
 COLORS=[
     ('red', QColor(255, 0, 0)),
     ('lime', QColor(0, 255, 0)),
@@ -17,6 +18,17 @@ COLORS=[
     ('navy', QColor(0,0,128))
 ]
 
+# displayed number of players in one row during the game
+NUM_PLAYERS_IN_ROW = 4
+
+# font size for the answers
+ANSWER_FONT_SIZE = 40
+
+# list of available hardware
+# format: (module path, class name)
+HARDWARE = [('pyjeopardy.hardware.buzzer', 'Buzzer')]
+
+# some helpful functions
 def get_color_for_name(name):
     for col in COLORS:
         if col[0] == name:
@@ -28,10 +40,3 @@ def get_color_name(color):
         if col[1] == color:
             return col[0]
     return None
-
-
-NUM_PLAYERS_IN_ROW = 4
-
-ANSWER_FONT_SIZE = 40
-
-HARDWARE = [('pyjeopardy.hardware.buzzer', 'Buzzer')]
