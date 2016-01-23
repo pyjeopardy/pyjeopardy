@@ -61,6 +61,19 @@ class AddPlayerDialog(QtGui.QDialog):
         for col in self._game.free_colors:
             self.colorWidget.addItem(col[0])
 
+        # key
+        keyLabel = QtGui.QLabel("Key")
+        self.keyWidget = QtGui.QComboBox()
+
+        # used hardware
+        hardwareLabel = QtGui.QLabel("Hardware")
+        self.hardwareWidget = QtGui.QComboBox()
+        self.hardwareWidget.currentIndexChanged.connect(self.update_keys)
+        for hw in self._game.hardware:
+            self.hardwareWidget.addItem(hw.name)
+
+        self.update_keys()
+
         # save
         self.saveButton = QtGui.QPushButton("Ok")
         self.saveButton.setDefault(True);
@@ -81,8 +94,14 @@ class AddPlayerDialog(QtGui.QDialog):
         grid.addWidget(colorLabel, 2, 0)
         grid.addWidget(self.colorWidget, 2, 1)
 
-        grid.addWidget(cancelButton, 3, 0)
-        grid.addWidget(self.saveButton, 3, 1)
+        grid.addWidget(hardwareLabel, 3, 0)
+        grid.addWidget(self.hardwareWidget, 3, 1)
+
+        grid.addWidget(keyLabel, 4, 0)
+        grid.addWidget(self.keyWidget, 4, 1)
+
+        grid.addWidget(cancelButton, 5, 0)
+        grid.addWidget(self.saveButton, 5, 1)
 
         self.setLayout(grid)
 
@@ -93,12 +112,27 @@ class AddPlayerDialog(QtGui.QDialog):
         name = self.nameWidget.text()
         color_name = self.colorWidget.currentText()
         color = get_color_for_name(color_name)
+        hardware = self.get_sel_hardware()
+        key_name = self.keyWidget.currentText()
+        key = hardware.get_key_for_name(key_name)
 
-        player = Player(name, color)
+        player = Player(name, color, hardware, key)
 
         self._game.add_player(player)
 
         self.close()
+
+    def get_sel_hardware(self):
+        hwname = self.hardwareWidget.currentText()
+        for hw in self._game.hardware:
+            if hw.name == hwname:
+                return hw
+        return None
+
+    def update_keys(self):
+        self.keyWidget.clear()
+        for key, name in self.get_sel_hardware().all_keys.items():
+            self.keyWidget.addItem(name)
 
     def update_save_button(self, text):
         if text:

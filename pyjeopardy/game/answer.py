@@ -4,8 +4,8 @@ class Answer:
     AUDIO = 3
     VIDEO = 4
 
-    def __init__(self, type_, data, question, double, points):
-        self._type = type_
+    def __init__(self, answertype, data, question, double, points):
+        self._type = answertype
         self._data = data
         self._question = question
         self._double = double

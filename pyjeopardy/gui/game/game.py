@@ -48,7 +48,8 @@ class JeopardyGameWidget(QtGui.QWidget):
                 self.answersGrid.addWidget(tmp, answer_num+1, cat_num)
 
     def open_answer(self, answer):
-        answerwidget = JeopardyAnswerWidget(answer=answer, gamewidget=self)
+        answerwidget = JeopardyAnswerWidget(answer=answer, gamewidget=self,
+                                            game=self._game)
         self._main.show_answer(answerwidget)
 
     def abort_answer(self):

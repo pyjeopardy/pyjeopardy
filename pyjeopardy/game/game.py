@@ -2,10 +2,17 @@ from copy import deepcopy
 
 from pyjeopardy import config
 
+from .hardware import Keyboard
+
 class Game:
     def __init__(self):
         self.rounds = []
         self.players = []
+        self.hardware = []
+
+        # add keyboard as hardware
+        self.keyboard = Keyboard()
+        self.hardware.append(self.keyboard)
 
         self.free_colors = deepcopy(config.COLORS)
 
