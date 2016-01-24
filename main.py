@@ -1,5 +1,5 @@
 #!/usr/bin/python3
- 
+
 # Import PySide classes
 import sys
 from PySide import QtGui
