@@ -39,3 +39,14 @@ class Game:
             if hw.active:
                 return True
         return False
+
+    def used_keys_for_hardware(self, hardware):
+        if hardware not in self.hardware:
+            return None
+
+        keys = []
+        for player in self.players:
+            if player.hardware == hardware:
+                keys.append(player.key)
+
+        return keys

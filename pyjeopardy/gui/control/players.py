@@ -137,9 +137,13 @@ class AddPlayerDialog(QtWidgets.QDialog):
         return None
 
     def update_keys(self):
+        hw = self.get_sel_hardware()
+        used_keys = self._game.used_keys_for_hardware(hw)
+
         self.keyWidget.clear()
-        for key, name in self.get_sel_hardware().all_keys.items():
-            self.keyWidget.addItem(name)
+        for key, name in hw.all_keys.items():
+            if key not in used_keys:
+                self.keyWidget.addItem(name)
 
     def update_save_button(self, text):
         if text:
