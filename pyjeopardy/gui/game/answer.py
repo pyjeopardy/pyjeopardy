@@ -77,7 +77,8 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
         self._player_answers(None)
 
     def keyPressEvent(self, e):
-        self.hardware_event(self._game.keyboard, e.key())
+        if self._game.keyboard.active:
+            self.hardware_event(self._game.keyboard, e.key())
 
     def hardware_event(self, hardware, key):
         if not self._current_player:
