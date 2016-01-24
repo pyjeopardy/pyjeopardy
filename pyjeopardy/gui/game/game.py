@@ -9,6 +9,9 @@ class JeopardyGameWidget(QtWidgets.QWidget):
         self._main = kwargs.pop('main')
         self._round = kwargs.pop('round')
 
+        self._cur_answer = None
+        self._cur_button = None
+
         super(JeopardyGameWidget, self).__init__(*args, **kwargs)
 
         # title
@@ -42,15 +45,39 @@ class JeopardyGameWidget(QtWidgets.QWidget):
                                   QtWidgets.QSizePolicy.Expanding)
 
                 # add event handler
-                tmp.clicked.connect(lambda clicked,answer=answer:
-                                    self.open_answer(answer))
+                tmp.clicked.connect(lambda clicked,answer=answer,button=tmp:
+                                    self.open_answer(answer, button))
 
                 self.answersGrid.addWidget(tmp, answer_num+1, cat_num)
 
-    def open_answer(self, answer):
+    def open_answer(self, answer, button):
+        self._cur_answer = answer
+        self._cur_button = button
+
         answerwidget = JeopardyAnswerWidget(answer=answer, gamewidget=self,
                                             game=self._game)
         self._main.show_answer(answerwidget)
 
-    def abort_answer(self):
+    def close_answer(self):
         self._main.close_answer()
+
+        self.points.update()
+        self._disable_button(self._cur_answer, self._cur_button)
+
+        self._cur_answer = None
+        self._cur_button = None
+
+    def _disable_button(self, answer, button):
+        button.setEnabled(False)
+
+        # update text
+        log = self._game.log.get(answer)
+        new_label = []
+        for entry in log:
+            if entry.points >= 0:
+                format_str = "+{} {}"
+            elif entry.points < 0:
+                format_str = "-{} {}"
+            new_label.append(format_str.format(entry.points,
+                                               entry.player.name))
+        button.setText("\n".join(new_label))

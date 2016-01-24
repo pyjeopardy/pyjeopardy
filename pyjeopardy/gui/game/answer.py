@@ -65,16 +65,23 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
         vbox.addLayout(buttons_box)
 
     def end(self):
-        self._gamewidget.abort_answer()
+        self._gamewidget.close_answer()
 
     def right(self):
-        pass
+        self._update_points(self._answer.get_points())
+        self._gamewidget.close_answer()
 
     def wrong(self):
-        pass
+        self._update_points(-1 * self._answer.get_points())
+        self._player_answers(None)
 
     def cancel(self):
+        self._update_points(0)
         self._player_answers(None)
+
+    def _update_points(self, points):
+        self._current_player.add_points(points)
+        self._game.log.add(self._answer, self._current_player, points)
 
     def keyPressEvent(self, e):
         if self._game.keyboard.active:

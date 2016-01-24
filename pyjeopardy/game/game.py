@@ -4,12 +4,14 @@ from importlib import import_module
 from pyjeopardy import config
 
 from .hardware import Keyboard
+from .log import Log
 
 class Game:
     def __init__(self):
         self.rounds = []
         self.players = []
         self.hardware = []
+        self.log = None
 
         # add keyboard as hardware
         self.keyboard = Keyboard()
@@ -23,6 +25,9 @@ class Game:
             self.hardware.append(hw())
 
         self.free_colors = deepcopy(config.COLORS)
+
+    def reset_log(self):
+        self.log = Log()
 
     def add_round(self, round):
         self.rounds.append(round)

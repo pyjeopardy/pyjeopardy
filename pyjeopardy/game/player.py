@@ -6,3 +6,6 @@ class Player:
 
         self.hardware = hardware
         self.key = key
+
+    def add_points(self, points):
+        self.points += points

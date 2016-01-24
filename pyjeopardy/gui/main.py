@@ -69,6 +69,9 @@ class JeopardyMain(QtWidgets.QMainWindow):
         configMenu.addAction(saveConfigAction)
 
     def start_game(self):
+        # reset game log
+        self._game.reset_log()
+
         # get currently selected round
         cur_round = self.controlWidget.get_selected_round()
 
