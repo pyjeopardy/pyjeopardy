@@ -1,10 +1,12 @@
 from PyQt5 import QtGui, QtCore, QtWidgets
 
+
 class HardwareItem(QtGui.QStandardItem):
     def __init__(self, *args, **kwargs):
         self.hardware = kwargs.pop('hardware')
 
         super(HardwareItem, self).__init__(*args, **kwargs)
+
 
 class HardwareDialog(QtWidgets.QDialog):
     def __init__(self, game, parent=None):
@@ -19,6 +21,8 @@ class HardwareDialog(QtWidgets.QDialog):
         # list
         self.listWidget = QtWidgets.QListView()
         self.listWidget.setModel(self.listmodel)
+        self.listWidget.selectionModel().currentChanged.connect(
+            self.update_configure_status)
 
         # add hardware to table
         for hw in self._game.hardware:
@@ -31,8 +35,8 @@ class HardwareDialog(QtWidgets.QDialog):
             self.listmodel.appendRow(item)
 
         # edit button
-        configureButton = QtWidgets.QPushButton("Configure")
-        configureButton.clicked.connect(self.configure)
+        self.configureButton = QtWidgets.QPushButton("Configure")
+        self.configureButton.clicked.connect(self.configure)
 
         # ok button
         okButton = QtWidgets.QPushButton("Ok")
@@ -41,13 +45,21 @@ class HardwareDialog(QtWidgets.QDialog):
         # layout
         vbox = QtWidgets.QVBoxLayout()
         vbox.addWidget(self.listWidget)
-        vbox.addWidget(configureButton)
+        vbox.addWidget(self.configureButton)
         vbox.addWidget(okButton)
 
         self.setLayout(vbox)
 
         # window title
         self.setWindowTitle("Configure hardware")
+
+    def update_configure_status(self):
+        hardware = self._current_hardware()
+
+        if hardware.configdialog:
+            self.configureButton.setEnabled(True)
+        else:
+            self.configureButton.setEnabled(False)
 
     def activate_hardware(self, item):
         if item.checkState() == QtCore.Qt.Checked:
@@ -56,10 +68,13 @@ class HardwareDialog(QtWidgets.QDialog):
             item.hardware.active = False
 
     def configure(self):
-        index = self.listWidget.currentIndex()
-        item = self.listmodel.itemFromIndex(index)
-        hardware = item.hardware
+        hardware = self._current_hardware()
 
         if hardware.configdialog:
             dialog = hardware.configdialog(hardware)
             dialog.exec_()
+
+    def _current_hardware(self):
+        index = self.listWidget.currentIndex()
+        item = self.listmodel.itemFromIndex(index)
+        return item.hardware
