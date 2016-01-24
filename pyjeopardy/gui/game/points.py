@@ -1,16 +1,16 @@
-from PySide import QtGui, QtCore
+from PyQt5 import QtCore, QtWidgets
 from math import floor
 
 from pyjeopardy.config import NUM_PLAYERS_IN_ROW
 
-class JeopardyPointsWidget(QtGui.QWidget):
+class JeopardyPointsWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
         self._game = kwargs.pop('game')
 
         super(JeopardyPointsWidget, self).__init__(*args, **kwargs)
 
         # layout
-        self.grid = QtGui.QGridLayout()
+        self.grid = QtWidgets.QGridLayout()
         self.setLayout(self.grid)
 
         # add players
@@ -29,7 +29,7 @@ class JeopardyPointsWidget(QtGui.QWidget):
         for player in self._player_widget_map:
             self._player_widget_map[player].update()
 
-class PlayerWidget(QtGui.QWidget):
+class PlayerWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
         self._player = kwargs.pop('player')
 
@@ -43,13 +43,13 @@ class PlayerWidget(QtGui.QWidget):
         self.setPalette(p)
 
         # name
-        self.name = QtGui.QLabel(self._player.name)
+        self.name = QtWidgets.QLabel(self._player.name)
 
         # points
-        self.points = QtGui.QLabel(str(self._player.points))
+        self.points = QtWidgets.QLabel(str(self._player.points))
 
         # layout
-        hbox = QtGui.QHBoxLayout()
+        hbox = QtWidgets.QHBoxLayout()
         hbox.addWidget(self.name)
         hbox.addWidget(self.points, alignment=QtCore.Qt.AlignRight)
 

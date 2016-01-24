@@ -1,9 +1,9 @@
-from PySide import QtGui
+from PyQt5 import QtGui, QtWidgets
 from pyjeopardy.game import Game, HardwareError
 from .control import JeopardyControlWidget, HardwareDialog
 from .game import JeopardyGameWidget, JeopardyAnswerWidget
 
-class JeopardyMain(QtGui.QMainWindow):
+class JeopardyMain(QtWidgets.QMainWindow):
     def __init__(self):
         super(JeopardyMain, self).__init__()
 
@@ -19,7 +19,7 @@ class JeopardyMain(QtGui.QMainWindow):
         self.controlWidget = JeopardyControlWidget(game=self._game, main=self)
 
         # window content
-        self.content = QtGui.QStackedWidget(self);
+        self.content = QtWidgets.QStackedWidget(self);
         self.content.addWidget(self.controlWidget)
         self.content.setCurrentWidget(self.controlWidget)
 
@@ -39,18 +39,18 @@ class JeopardyMain(QtGui.QMainWindow):
         gameMenu = menubar.addMenu('&Game')
 
         # menu -> game -> abort game
-        self.abortGameAction = QtGui.QAction('&Abort', self)
+        self.abortGameAction = QtWidgets.QAction('&Abort', self)
         self.abortGameAction.triggered.connect(self.stop_game)
         self.abortGameAction.setEnabled(False)
         gameMenu.addAction(self.abortGameAction)
 
         # menu -> game -> hardware
-        hardwareAction = QtGui.QAction('&Hardware', self)
+        hardwareAction = QtWidgets.QAction('&Hardware', self)
         hardwareAction.triggered.connect(self.configure_hardware)
         gameMenu.addAction(hardwareAction)
 
         # menu -> game -> exit
-        exitAction = QtGui.QAction(QtGui.QIcon('exit.png'), '&Exit', self)
+        exitAction = QtWidgets.QAction(QtGui.QIcon('exit.png'), '&Exit', self)
         exitAction.triggered.connect(self.close)
         gameMenu.addAction(exitAction)
 
@@ -58,11 +58,11 @@ class JeopardyMain(QtGui.QMainWindow):
         configMenu = menubar.addMenu('&Configuration')
 
         # menu -> config -> load
-        loadConfigAction = QtGui.QAction('&Load', self)
+        loadConfigAction = QtWidgets.QAction('&Load', self)
         configMenu.addAction(loadConfigAction)
 
         # menu -> config -> save
-        saveConfigAction = QtGui.QAction('&Save', self)
+        saveConfigAction = QtWidgets.QAction('&Save', self)
         configMenu.addAction(saveConfigAction)
 
     def start_game(self):

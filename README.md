@@ -2,5 +2,5 @@ Dependencies
 ============
 
 * python3
-* python3-pyside
+* python3-pyqt5
 * python3-serial

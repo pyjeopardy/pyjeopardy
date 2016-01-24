@@ -1,9 +1,9 @@
-from PySide import QtGui
+from PyQt5 import QtWidgets
 
 from .rounds import JeopardyRoundsWidget
 from .players import JeopardyPlayersWidget
 
-class JeopardyControlWidget(QtGui.QWidget):
+class JeopardyControlWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
         self._game = kwargs.pop('game')
         self._main = kwargs.pop('main')
@@ -18,17 +18,17 @@ class JeopardyControlWidget(QtGui.QWidget):
         self.playersWidget = JeopardyPlayersWidget(game=self._game)
 
         # play button
-        self.playButton = QtGui.QPushButton("Play")
+        self.playButton = QtWidgets.QPushButton("Play")
         self.playButton.setEnabled(False)
         self.playButton.clicked.connect(self._main.start_game)
 
         # layout: place rounds and players horizontally
-        hbox = QtGui.QHBoxLayout()
+        hbox = QtWidgets.QHBoxLayout()
         hbox.addWidget(self.roundsWidget)
         hbox.addWidget(self.playersWidget)
 
         # layout: play button on the bottom
-        vbox = QtGui.QVBoxLayout(self)
+        vbox = QtWidgets.QVBoxLayout(self)
         vbox.addLayout(hbox)
         vbox.addWidget(self.playButton)
 

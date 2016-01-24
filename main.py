@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 
-# Import PySide classes
+# Import PyQt5 classes
 import sys
-from PySide import QtGui
+from PyQt5 import QtWidgets
 
 from pyjeopardy.gui import JeopardyMain
 
 def main():
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     main = JeopardyMain()
 
     sys.exit(app.exec_())

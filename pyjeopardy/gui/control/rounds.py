@@ -1,8 +1,8 @@
-from PySide import QtGui
+from PyQt5 import QtWidgets
 
 from pyjeopardy.game import Round, ParserError
 
-class JeopardyRoundsWidget(QtGui.QWidget):
+class JeopardyRoundsWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
         self._game = kwargs.pop('game')
         self._main = kwargs.pop('main')
@@ -10,18 +10,18 @@ class JeopardyRoundsWidget(QtGui.QWidget):
         super(JeopardyRoundsWidget, self).__init__(*args, **kwargs)
 
         # list
-        self.listWidget = QtGui.QListWidget(self)
+        self.listWidget = QtWidgets.QListWidget(self)
         self.listWidget.currentItemChanged.connect(self.round_changed)
 
         # title
-        title = QtGui.QLabel('Rounds')
+        title = QtWidgets.QLabel('Rounds')
 
         # add button
-        addButton = QtGui.QPushButton("Add")
+        addButton = QtWidgets.QPushButton("Add")
         addButton.clicked.connect(self.add_round)
 
         # layout
-        hbox = QtGui.QVBoxLayout()
+        hbox = QtWidgets.QVBoxLayout()
         hbox.addWidget(title)
         hbox.addWidget(self.listWidget)
         hbox.addWidget(addButton)
@@ -34,10 +34,10 @@ class JeopardyRoundsWidget(QtGui.QWidget):
         self.listWidget.clear()
 
         for round in self._game.rounds:
-            self.listWidget.addItem(QtGui.QListWidgetItem(round.name))
+            self.listWidget.addItem(QtWidgets.QListWidgetItem(round.name))
 
     def add_round(self):
-        fname, _ = QtGui.QFileDialog.getOpenFileName(self, 'Open file',
+        fname, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file',
             filter='JSON files (*.json);;All files (*)')
 
         if fname:
@@ -45,7 +45,7 @@ class JeopardyRoundsWidget(QtGui.QWidget):
             try:
                 round.load(fname)
             except ParserError as e:
-                errorBox = QtGui.QMessageBox(QtGui.QMessageBox.Critical,
+                errorBox = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
                     "Error loading round", "Cannot load JSON file")
                 errorBox.setInformativeText(e.value)
                 errorBox.exec_()

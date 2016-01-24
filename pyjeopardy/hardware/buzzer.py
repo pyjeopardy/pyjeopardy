@@ -1,6 +1,6 @@
 from pyjeopardy.game import Hardware, HardwareError
 
-from PySide import QtGui
+from PyQt5 import QtWidgets
 
 import serial.tools.list_ports
 
@@ -28,22 +28,22 @@ class Buzzer(Hardware):
             #    self.tty = tty.device
         return result
 
-class BuzzerConfigDialog(QtGui.QDialog):
+class BuzzerConfigDialog(QtWidgets.QDialog):
     def __init__(self, hardware, parent=None):
         super(BuzzerConfigDialog, self).__init__(parent)
 
         self._buzzer = hardware
 
         # tty
-        ttyLabel = QtGui.QLabel("TTY")
+        ttyLabel = QtWidgets.QLabel("TTY")
         ttys = self._buzzer.detect_ttys()
-        self.ttyWidget = QtGui.QComboBox()
+        self.ttyWidget = QtWidgets.QComboBox()
         for tty in ttys:
             self.ttyWidget.addItem("{} - {}".format(*tty), tty[0])
         self.ttyWidget.addItem("Custom path", None)
 
         # custom tty
-        self.customttyWidget = QtGui.QLineEdit()
+        self.customttyWidget = QtWidgets.QLineEdit()
 
         # set selected tty
         new_sel_index = self.ttyWidget.findData(self._buzzer.tty)
@@ -59,17 +59,17 @@ class BuzzerConfigDialog(QtGui.QDialog):
         self.ttyWidget.currentIndexChanged.connect(self.update_custom_field)
 
         # save
-        saveButton = QtGui.QPushButton("Save")
+        saveButton = QtWidgets.QPushButton("Save")
         saveButton.setDefault(True);
         saveButton.setAutoDefault(True);
         saveButton.clicked.connect(self.save)
 
         # cancel
-        cancelButton = QtGui.QPushButton("Cancel")
+        cancelButton = QtWidgets.QPushButton("Cancel")
         cancelButton.clicked.connect(self.close)
 
         # layout
-        grid = QtGui.QGridLayout()
+        grid = QtWidgets.QGridLayout()
 
         grid.addWidget(ttyLabel, 1, 0)
         grid.addWidget(self.ttyWidget, 1, 1)

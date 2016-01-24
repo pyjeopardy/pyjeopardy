@@ -1,4 +1,4 @@
-from PySide import QtGui, QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 
 class HardwareItem(QtGui.QStandardItem):
     def __init__(self, *args, **kwargs):
@@ -6,7 +6,7 @@ class HardwareItem(QtGui.QStandardItem):
 
         super(HardwareItem, self).__init__(*args, **kwargs)
 
-class HardwareDialog(QtGui.QDialog):
+class HardwareDialog(QtWidgets.QDialog):
     def __init__(self, game, parent=None):
         super(HardwareDialog, self).__init__(parent)
 
@@ -17,7 +17,7 @@ class HardwareDialog(QtGui.QDialog):
         self.listmodel.itemChanged.connect(self.activate_hardware)
 
         # list
-        self.listWidget = QtGui.QListView()
+        self.listWidget = QtWidgets.QListView()
         self.listWidget.setModel(self.listmodel)
 
         # add hardware to table
@@ -31,15 +31,15 @@ class HardwareDialog(QtGui.QDialog):
             self.listmodel.appendRow(item)
 
         # edit button
-        configureButton = QtGui.QPushButton("Configure")
+        configureButton = QtWidgets.QPushButton("Configure")
         configureButton.clicked.connect(self.configure)
 
         # ok button
-        okButton = QtGui.QPushButton("Ok")
+        okButton = QtWidgets.QPushButton("Ok")
         okButton.clicked.connect(self.close)
 
         # layout
-        vbox = QtGui.QVBoxLayout()
+        vbox = QtWidgets.QVBoxLayout()
         vbox.addWidget(self.listWidget)
         vbox.addWidget(configureButton)
         vbox.addWidget(okButton)
