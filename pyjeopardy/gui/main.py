@@ -38,16 +38,19 @@ class JeopardyMain(QtWidgets.QMainWindow):
         # menu -> game
         gameMenu = menubar.addMenu('&Game')
 
+        # menu -> game -> hardware
+        hardwareAction = QtWidgets.QAction('&Hardware', self)
+        hardwareAction.triggered.connect(self.configure_hardware)
+        gameMenu.addAction(hardwareAction)
+
+        # menu -> game separator
+        gameMenu.addSeparator()
+
         # menu -> game -> abort game
         self.abortGameAction = QtWidgets.QAction('&Abort', self)
         self.abortGameAction.triggered.connect(self.stop_game)
         self.abortGameAction.setEnabled(False)
         gameMenu.addAction(self.abortGameAction)
-
-        # menu -> game -> hardware
-        hardwareAction = QtWidgets.QAction('&Hardware', self)
-        hardwareAction.triggered.connect(self.configure_hardware)
-        gameMenu.addAction(hardwareAction)
 
         # menu -> game -> exit
         exitAction = QtWidgets.QAction(QtGui.QIcon('exit.png'), '&Exit', self)
