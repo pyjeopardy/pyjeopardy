@@ -40,8 +40,14 @@ class JeopardyPlayersWidget(QtWidgets.QWidget):
         for player in self._game.players:
             self.listWidget.addItem(QtWidgets.QListWidgetItem(player.name))
 
-        # update "Add" button
-        if len(self._game.free_colors) == 0:
+        self.update_add_status()
+
+    def update_add_status(self):
+        if len(self._game.free_colors) != 0 and \
+            self._game.is_active_hardware():
+
+            self.addButton.setEnabled(True)
+        else:
             self.addButton.setEnabled(False)
 
 class AddPlayerDialog(QtWidgets.QDialog):

@@ -33,3 +33,9 @@ class Game:
         self.free_colors.remove((color_name, player.color))
 
         self.players.append(player)
+
+    def is_active_hardware(self):
+        for hw in self.hardware:
+            if hw.active:
+                return True
+        return False

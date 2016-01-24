@@ -99,6 +99,8 @@ class JeopardyMain(QtWidgets.QMainWindow):
         dialog = HardwareDialog(self._game, self)
         dialog.exec_()
 
+        self.controlWidget.update_buttons()
+
     def _close_cur_widget(self):
         tmp = self.content.currentWidget()
 
