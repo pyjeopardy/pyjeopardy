@@ -1,4 +1,4 @@
-from PyQt5 import QtGui, QtWidgets
+from PyQt5 import QtGui, QtWidgets, QtCore
 from pyjeopardy.game import Game, HardwareError
 from .control import JeopardyControlWidget, HardwareDialog
 from .game import JeopardyGameWidget, JeopardyAnswerWidget
@@ -30,7 +30,6 @@ class JeopardyMain(QtWidgets.QMainWindow):
 
         # show
         self.show()
-
 
     def _add_menu(self):
         menubar = self.menuBar()
@@ -67,6 +66,13 @@ class JeopardyMain(QtWidgets.QMainWindow):
         # menu -> config -> save
         saveConfigAction = QtWidgets.QAction('&Save', self)
         configMenu.addAction(saveConfigAction)
+
+    def changeEvent(self, event):
+        if event.type() == QtCore.QEvent.WindowStateChange:
+            if self.windowState() & QtCore.Qt.WindowFullScreen:
+                self.menuBar().setVisible(False)
+            else:
+                self.menuBar().setVisible(True)
 
     def start_game(self):
         # reset game log

@@ -3,6 +3,9 @@ from PyQt5 import QtWidgets
 from .answer import JeopardyAnswerWidget
 from .points import JeopardyPointsWidget
 
+from pyjeopardy.config import FONT_SIZE_POINTS, FONT_SIZE_CATEGORIES, \
+    FONT_SIZE_ROUND_NAME, FONT_SIZE_LOG
+
 class JeopardyGameWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
         self._game = kwargs.pop('game')
@@ -16,6 +19,8 @@ class JeopardyGameWidget(QtWidgets.QWidget):
 
         # title
         title = QtWidgets.QLabel(self._round.name)
+        title.setStyleSheet("* {{ font-size: {}px; }}".format(
+            FONT_SIZE_ROUND_NAME))
 
         # grid with answers
         self.answersGrid = QtWidgets.QGridLayout()
@@ -35,6 +40,8 @@ class JeopardyGameWidget(QtWidgets.QWidget):
     def _draw_grid(self):
         for cat_num, cat in enumerate(self._round.categories):
             title = QtWidgets.QLabel(cat.name)
+            title.setStyleSheet("* {{ font-size: {}px; }}".format(
+                FONT_SIZE_CATEGORIES))
             self.answersGrid.addWidget(title, 0, cat_num)
 
             for answer_num, answer in enumerate(cat.answers):
@@ -43,6 +50,10 @@ class JeopardyGameWidget(QtWidgets.QWidget):
                 # resize to full width
                 tmp.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
                                   QtWidgets.QSizePolicy.Expanding)
+
+                # set font size
+                tmp.setStyleSheet("* {{ font-size: {}px; }}".format(
+                    FONT_SIZE_POINTS))
 
                 # add event handler
                 tmp.clicked.connect(lambda clicked,answer=answer,button=tmp:
@@ -87,5 +98,6 @@ class JeopardyGameWidget(QtWidgets.QWidget):
         # color
         player = self._game.log.get_winner(answer)
         if player:
-            button.setStyleSheet("background-color: rgb({}, {}, {})".format(
-                *player.color.rgb()))
+            button.setStyleSheet("background-color: rgb({}, {}, {});"
+                                 "font-size: {}px;".format(
+                *player.color.rgb(), FONT_SIZE_LOG))

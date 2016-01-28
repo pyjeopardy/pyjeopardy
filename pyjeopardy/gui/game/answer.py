@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtWidgets
 
-from pyjeopardy.config import ANSWER_FONT_SIZE
+from pyjeopardy.config import FONT_SIZE_ANSWER
 
 
 class JeopardyAnswerWidget(QtWidgets.QWidget):
@@ -22,7 +22,7 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
         if self._answer.is_text():
             tmp = QtWidgets.QLabel(self._answer.get_text())
             tmp.setStyleSheet("QLabel {{ font-size: {}px; }}".format(
-                ANSWER_FONT_SIZE))
+                FONT_SIZE_ANSWER))
         # <- add further types here
 
         if tmp:

@@ -21,8 +21,12 @@ COLORS=[
 # displayed number of players in one row during the game
 NUM_PLAYERS_IN_ROW = 4
 
-# font size for the answers
-ANSWER_FONT_SIZE = 40
+# font sizes
+FONT_SIZE_ANSWER = 40
+FONT_SIZE_ROUND_NAME = 25
+FONT_SIZE_CATEGORIES = 20
+FONT_SIZE_POINTS = 30
+FONT_SIZE_LOG = 15
 
 # list of available hardware
 # format: (module path, class name)
