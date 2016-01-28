@@ -74,6 +74,8 @@ class JeopardyGameWidget(QtWidgets.QWidget):
         log = self._game.log.get(answer)
         new_label = []
         for entry in log:
+            last_player = entry.player
+
             if entry.points >= 0:
                 format_str = "+{} {}"
             elif entry.points < 0:
@@ -81,3 +83,9 @@ class JeopardyGameWidget(QtWidgets.QWidget):
             new_label.append(format_str.format(entry.points,
                                                entry.player.name))
         button.setText("\n".join(new_label))
+
+        # color
+        player = self._game.log.get_winner(answer)
+        if player:
+            button.setStyleSheet("background-color: rgb({}, {}, {})".format(
+                *player.color.rgb()))

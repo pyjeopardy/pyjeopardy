@@ -1,6 +1,6 @@
 from PyQt5 import QtWidgets
 
-from pyjeopardy.config import COLORS, get_color_for_name
+from pyjeopardy.config import COLORS
 from pyjeopardy.game import Player
 
 class JeopardyPlayersWidget(QtWidgets.QWidget):
@@ -65,7 +65,7 @@ class AddPlayerDialog(QtWidgets.QDialog):
         colorLabel = QtWidgets.QLabel("Color")
         self.colorWidget = QtWidgets.QComboBox()
         for col in self._game.free_colors:
-            self.colorWidget.addItem(col[0])
+            self.colorWidget.addItem(col.name, userData=col)
 
         # key
         keyLabel = QtWidgets.QLabel("Key")
@@ -117,8 +117,8 @@ class AddPlayerDialog(QtWidgets.QDialog):
 
     def add(self):
         name = self.nameWidget.text()
-        color_name = self.colorWidget.currentText()
-        color = get_color_for_name(color_name)
+        color_index = self.colorWidget.currentIndex()
+        color = self.colorWidget.itemData(color_index)
         hardware = self.get_sel_hardware()
         key_name = self.keyWidget.currentText()
         key = hardware.get_key_for_name(key_name)

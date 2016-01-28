@@ -33,9 +33,7 @@ class Game:
         self.rounds.append(round)
 
     def add_player(self, player):
-        # a bit ugly…
-        color_name = config.get_color_name(player.color)
-        self.free_colors.remove((color_name, player.color))
+        self.free_colors.remove(player.color)
 
         self.players.append(player)
 

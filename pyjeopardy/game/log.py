@@ -17,6 +17,14 @@ class Log:
     def get(self, answer):
         return self._entries.get(answer, [])
 
+    def get_winner(self, answer):
+        entries = self.get(answer)
+        try:
+            if entries[-1].points > 0:
+                    return entries[-1].player
+        except IndexError:
+            return None
+
     def _get_next_time(self):
         tmp = self._next_time
         self._next_time += 1

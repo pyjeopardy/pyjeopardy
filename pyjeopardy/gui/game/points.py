@@ -39,7 +39,7 @@ class PlayerWidget(QtWidgets.QWidget):
         self.setAutoFillBackground(True)
 
         p = self.palette()
-        p.setColor(self.backgroundRole(), self._player.color)
+        p.setColor(self.backgroundRole(), self._player.color.qt)
         self.setPalette(p)
 
         # name

@@ -1,21 +1,21 @@
-from PyQt5.QtGui import QColor
+from pyjeopardy.game.color import Color
 
 # available colors
 COLORS=[
-    ('red', QColor(255, 0, 0)),
-    ('lime', QColor(0, 255, 0)),
-    ('blue', QColor(0, 0, 255)),
-    ('yellow', QColor(255,255,0)),
-    ('cyan', QColor(0,255,255)),
-    ('magenta', QColor(255,0,255)),
-    ('silver', QColor(192,192,192)),
-    ('gray', QColor(128,128,128)),
-    ('maroon', QColor(128,0,0)),
-    ('olive', QColor(128,128,0)),
-    ('green', QColor(0,128,0)),
-    ('purple', QColor(128,0,128)),
-    ('teal', QColor(0,128,128)),
-    ('navy', QColor(0,0,128))
+    Color("red",        255,    0,      0,      False),
+    Color("lime",       0,      0,      255,    False),
+    Color("blue",       0,      0,      255,    True),
+    Color("yellow",     255,    255,    0,      False),
+    Color("cyan",       0,      255,    255,    False),
+    Color("magenta",    255,    0,      255,    False),
+    Color("silver",     192,    192,    192,    False),
+    Color("gray",       128,    128,    128,    False),
+    Color("maroon",     128,    0,      0,      True),
+    Color("olive",      128,    128,    0,      False),
+    Color("green",      0,      128,    0,      False),
+    Color("purple",     128,    0,      128,    True),
+    Color("teal",       0,      128,    128,    False),
+    Color("navy",       0,      0,      128,    False),
 ]
 
 # displayed number of players in one row during the game
@@ -29,14 +29,14 @@ ANSWER_FONT_SIZE = 40
 HARDWARE = [('pyjeopardy.hardware.buzzer', 'Buzzer')]
 
 # some helpful functions
-def get_color_for_name(name):
-    for col in COLORS:
-        if col[0] == name:
-            return col[1]
-    return None
-
-def get_color_name(color):
-    for col in COLORS:
-        if col[1] == color:
-            return col[0]
-    return None
+#def get_color_for_name(name):
+#    for col in COLORS:
+#        if col[0] == name:
+#            return col[1]
+#    return None
+#
+#def get_color_name(color):
+#    for col in COLORS:
+#        if col[1] == color:
+#            return col[0]
+#    return None
