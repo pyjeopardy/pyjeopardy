@@ -1,4 +1,8 @@
+import os
+
 from pyjeopardy.game.color import Color
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # available colors
 COLORS=[
@@ -27,20 +31,12 @@ FONT_SIZE_ROUND_NAME = 25
 FONT_SIZE_CATEGORIES = 20
 FONT_SIZE_POINTS = 30
 FONT_SIZE_LOG = 15
+FONT_SIZE_CUR_PLAYER = 30
+
+# media files
+MEDIA_DIR = os.path.join(BASE_DIR, 'pyjeopardy', 'media')
+AUDIO_WAITING = os.path.join(MEDIA_DIR, 'jeopardy.wav')
 
 # list of available hardware
 # format: (module path, class name)
 HARDWARE = [('pyjeopardy.hardware.buzzer', 'Buzzer')]
-
-# some helpful functions
-#def get_color_for_name(name):
-#    for col in COLORS:
-#        if col[0] == name:
-#            return col[1]
-#    return None
-#
-#def get_color_name(color):
-#    for col in COLORS:
-#        if col[1] == color:
-#            return col[0]
-#    return None

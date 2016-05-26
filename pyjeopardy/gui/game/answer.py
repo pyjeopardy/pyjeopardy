@@ -1,6 +1,7 @@
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtWidgets, QtMultimedia
 
-from pyjeopardy.config import FONT_SIZE_ANSWER
+from pyjeopardy.config import FONT_SIZE_ANSWER, FONT_SIZE_CUR_PLAYER, \
+    AUDIO_WAITING
 
 
 class JeopardyAnswerWidget(QtWidgets.QWidget):
@@ -34,6 +35,9 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
 
         # current player
         self.currentPlayerLabel = QtWidgets.QLabel("")
+        self.currentPlayerLabel.setStyleSheet("QLabel {{ font-size: "
+                                              "{}px; }}".format(
+                                                FONT_SIZE_CUR_PLAYER))
 
         # right button
         self.rightButton = QtWidgets.QPushButton("Right")
@@ -63,6 +67,18 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
         buttons_box.addWidget(endButton)
 
         vbox.addLayout(buttons_box)
+
+        # play sound
+        url= QtCore.QUrl.fromLocalFile(AUDIO_WAITING)
+        content= QtMultimedia.QMediaContent(url)
+        self.audio_player = QtMultimedia.QMediaPlayer()
+        self.audio_player.setMedia(content)
+        self.audio_player.play()
+
+    def hideEvent(self, event):
+        self.audio_player.stop()
+
+        super(JeopardyAnswerWidget, self).hideEvent(event)
 
     def end(self):
         self._gamewidget.close_answer()
@@ -106,6 +122,8 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
         if self._current_player:
             self.currentPlayerLabel.setText(self._current_player.name)
             self._enable_result_buttons(True)
+
+            self.audio_player.stop()
         else:
             self.currentPlayerLabel.setText("")
             self._enable_result_buttons(False)
