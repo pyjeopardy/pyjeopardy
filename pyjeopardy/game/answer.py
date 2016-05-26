@@ -14,8 +14,16 @@ class Answer:
     def is_text(self):
         return self._type == Answer.TEXT
 
+    def is_image(self):
+        return self._type == Answer.IMAGE
+
     def get_text(self):
         if self.is_text():
+            return self._data
+        return None
+
+    def get_path(self):
+        if self.is_image():
             return self._data
         return None
 

@@ -1,7 +1,9 @@
-from PyQt5 import QtCore, QtWidgets, QtMultimedia
+from PyQt5 import QtCore, QtWidgets, QtMultimedia, QtGui
 
 from pyjeopardy.config import FONT_SIZE_ANSWER, FONT_SIZE_CUR_PLAYER, \
     AUDIO_WAITING
+
+from .image import ImageWidget
 
 
 class JeopardyAnswerWidget(QtWidgets.QWidget):
@@ -24,6 +26,9 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
             tmp = QtWidgets.QLabel(self._answer.get_text())
             tmp.setStyleSheet("QLabel {{ font-size: {}px; }}".format(
                 FONT_SIZE_ANSWER))
+            tmp.setWordWrap(True);
+        elif self._answer.is_image():
+            tmp = ImageWidget(filename=self._answer.get_path())
         # <- add further types here
 
         if tmp:

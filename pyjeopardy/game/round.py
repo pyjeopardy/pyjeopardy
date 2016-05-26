@@ -1,4 +1,5 @@
 import json
+import os
 
 from .category import Category
 from .answer import Answer
@@ -27,6 +28,8 @@ class Round:
         except ValueError as e:
             raise ParserError("Invalid JSON: {}".format(str(e)))
 
+        base_dir = os.path.dirname(filename)
+
         if type(data) != dict:
             raise ParserError("Invalid format, expected dict")
 
@@ -44,10 +47,10 @@ class Round:
             raise ParserError("Categories are missing")
 
         for category in data["categories"]:
-            category_obj = self._parse_category(category)
+            category_obj = self._parse_category(category, base_dir)
             self.categories.append(category_obj)
 
-    def _parse_category(self, json):
+    def _parse_category(self, json, base_dir):
         if type(json) != dict:
             raise ParserError("Invalid format, expected dict inside "
                               "categories")
@@ -66,21 +69,27 @@ class Round:
         points = 0
         for answer in json["answers"]:
             points = points + 100
-            answer_obj = self._parse_answer(answer, points)
+            answer_obj = self._parse_answer(answer, points, base_dir)
             category_obj.add(answer_obj)
 
         return category_obj
 
-    def _parse_answer(self, json, points):
+    def _parse_answer(self, json, points, base_dir):
         if type(json) != dict:
             raise ParserError("Invalid answer format, expected "
                               "dict")
 
         # get data
-        answer_type = Answer.TEXT
+        if "image" in json:
+            answer_type = Answer.IMAGE
+            data = os.path.join(base_dir, json["image"])
+        else:
+            answer_type = Answer.TEXT
 
-        if "answer" not in json:
-            raise ParserError("Answer for answer is missing")
+            if "answer" not in json:
+                raise ParserError("Answer for answer is missing")
+
+            data = json["answer"]
 
         if "question" not in json:
             raise ParserError("Question for answer is missing")
@@ -94,5 +103,5 @@ class Round:
                                   "true or false")
 
         # create answer
-        return Answer(answer_type, json["answer"], json["question"],
-                      answer_double, points)
+        return Answer(answer_type, data, json["question"], answer_double,
+                      points)

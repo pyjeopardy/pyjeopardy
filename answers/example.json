@@ -5,7 +5,7 @@
             "name": "Test 1",
             "answers": [
                 {
-                    "answer": "42",
+                    "answer": "42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42",
                     "question": "Everything?",
                     "doublejeopardy": false
                 },
@@ -32,6 +32,16 @@
                 {
                     "answer": "23",
                     "question": "Half truth + 2?",
+                    "doublejeopardy": false
+                }
+            ]
+        },
+        {
+            "name": "Image test",
+            "answers": [
+                {
+                    "image": "test.jpg",
+                    "question": "Everything?",
                     "doublejeopardy": false
                 }
             ]
