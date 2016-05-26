@@ -98,10 +98,12 @@ class JeopardyGameWidget(QtWidgets.QWidget):
         # color
         player = self._game.log.get_winner(answer)
         if player:
+            bg = player.color.rgb()
+            fg = player.color.textcolor_rgb()
+
             button.setStyleSheet("background-color: rgb({}, {}, {});"
                                  "color: rgb({}, {}, {});"
                                  "font-size: {}px;".format(
-                *player.color.rgb(), *player.color.textcolor_rgb(),
-                FONT_SIZE_LOG))
+                bg[0], bg[1], bg[2], fg[0], fg[1], fg[2], FONT_SIZE_LOG))
         else:
             button.setStyleSheet("font-size: {}px;".format(FONT_SIZE_LOG))
