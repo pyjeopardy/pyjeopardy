@@ -40,6 +40,7 @@ class PlayerWidget(QtWidgets.QWidget):
 
         p = self.palette()
         p.setColor(self.backgroundRole(), self._player.color.qt)
+        p.setColor(self.foregroundRole(), self._player.color.textcolor());
         self.setPalette(p)
 
         # name

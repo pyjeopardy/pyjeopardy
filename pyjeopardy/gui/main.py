@@ -76,7 +76,7 @@ class JeopardyMain(QtWidgets.QMainWindow):
 
     def start_game(self):
         # reset game log
-        self._game.reset_log()
+        self._game.reset_log_and_points()
 
         # get currently selected round
         cur_round = self.controlWidget.get_selected_round()

@@ -7,7 +7,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # available colors
 COLORS=[
     Color("red",        255,    0,      0,      False),
-    Color("lime",       0,      0,      255,    False),
     Color("blue",       0,      0,      255,    True),
     Color("yellow",     255,    255,    0,      False),
     Color("cyan",       0,      255,    255,    False),
@@ -19,7 +18,7 @@ COLORS=[
     Color("green",      0,      128,    0,      False),
     Color("purple",     128,    0,      128,    True),
     Color("teal",       0,      128,    128,    False),
-    Color("navy",       0,      0,      128,    False),
+    Color("navy",       0,      0,      128,    True),
 ]
 
 # displayed number of players in one row during the game
