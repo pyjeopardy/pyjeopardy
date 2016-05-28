@@ -1,7 +1,8 @@
 from PyQt5 import QtCore, QtWidgets
 from math import floor
 
-from pyjeopardy.config import NUM_PLAYERS_IN_ROW
+from pyjeopardy.config import NUM_PLAYERS_IN_ROW, FONT_SIZE_PLAYERS
+
 
 class JeopardyPointsWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
@@ -29,6 +30,7 @@ class JeopardyPointsWidget(QtWidgets.QWidget):
         for player in self._player_widget_map:
             self._player_widget_map[player].update()
 
+
 class PlayerWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
         self._player = kwargs.pop('player')
@@ -40,8 +42,12 @@ class PlayerWidget(QtWidgets.QWidget):
 
         p = self.palette()
         p.setColor(self.backgroundRole(), self._player.color.qt)
-        p.setColor(self.foregroundRole(), self._player.color.textcolor());
+        p.setColor(self.foregroundRole(), self._player.color.textcolor())
         self.setPalette(p)
+
+        # font size
+        self.setStyleSheet("QWidget {{ font-size: {}px; }}".format(
+                            FONT_SIZE_PLAYERS))
 
         # name
         self.name = QtWidgets.QLabel(self._player.name)

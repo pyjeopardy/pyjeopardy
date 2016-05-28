@@ -3,7 +3,7 @@ from PyQt5 import QtWidgets
 from .answer import JeopardyAnswerWidget
 from .points import JeopardyPointsWidget
 
-from pyjeopardy.config import FONT_SIZE_POINTS, FONT_SIZE_CATEGORIES, \
+from pyjeopardy.config import FONT_SIZE_ANSWER_POINTS, FONT_SIZE_CATEGORIES, \
     FONT_SIZE_ROUND_NAME, FONT_SIZE_LOG
 
 class JeopardyGameWidget(QtWidgets.QWidget):
@@ -53,7 +53,7 @@ class JeopardyGameWidget(QtWidgets.QWidget):
 
                 # set font size
                 tmp.setStyleSheet("* {{ font-size: {}px; }}".format(
-                    FONT_SIZE_POINTS))
+                    FONT_SIZE_ANSWER_POINTS))
 
                 # add event handler
                 tmp.clicked.connect(lambda clicked,answer=answer,button=tmp:
