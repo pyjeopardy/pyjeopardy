@@ -66,7 +66,7 @@ class JeopardyGameWidget(QtWidgets.QWidget):
         self._cur_button = button
 
         answerwidget = JeopardyAnswerWidget(answer=answer, gamewidget=self,
-                                            game=self._game)
+                                            game=self._game, main=self._main)
         self._main.show_answer(answerwidget)
 
     def close_answer(self):

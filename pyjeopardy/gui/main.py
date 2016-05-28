@@ -1,13 +1,19 @@
 from PyQt5 import QtGui, QtWidgets, QtCore
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
+
 from pyjeopardy.game import Game, HardwareError
+
 from .control import JeopardyControlWidget, HardwareDialog
 from .game import JeopardyGameWidget, JeopardyAnswerWidget
+
 
 class JeopardyMain(QtWidgets.QMainWindow):
     def __init__(self):
         super(JeopardyMain, self).__init__()
 
         self._game = Game()
+
+        self._audio_player = QMediaPlayer()
 
         self.initUI()
 
@@ -19,7 +25,7 @@ class JeopardyMain(QtWidgets.QMainWindow):
         self.controlWidget = JeopardyControlWidget(game=self._game, main=self)
 
         # window content
-        self.content = QtWidgets.QStackedWidget(self);
+        self.content = QtWidgets.QStackedWidget(self)
         self.content.addWidget(self.controlWidget)
         self.content.setCurrentWidget(self.controlWidget)
 
@@ -126,3 +132,18 @@ class JeopardyMain(QtWidgets.QMainWindow):
     def _close_all_widgets(self):
         while self._close_cur_widget():
             pass
+
+    def audio_play(self, filename=None):
+        if filename:
+            url = QtCore.QUrl.fromLocalFile(filename)
+            content = QMediaContent(url)
+            self._audio_player.setMedia(content)
+
+        # TODO: check if content is available
+        self._audio_player.play()
+
+    def audio_stop(self):
+        self._audio_player.stop()
+
+    def audio_playing(self):
+        return self._audio_player.state() == QMediaPlayer.PlayingState

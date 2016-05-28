@@ -1,5 +1,4 @@
-from PyQt5 import QtCore, QtWidgets, QtGui
-from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
+from PyQt5 import QtCore, QtWidgets
 
 from pyjeopardy.config import FONT_SIZE_ANSWER, FONT_SIZE_CUR_PLAYER, \
     AUDIO_WAITING
@@ -12,6 +11,7 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
         self._game = kwargs.pop('game')
         self._gamewidget = kwargs.pop('gamewidget')
         self._answer = kwargs.pop('answer')
+        self._main = kwargs.pop('main')
 
         self._current_player = None
         self._content = None
@@ -28,12 +28,12 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
             self._content.setStyleSheet("QLabel {{ font-size: {}px; }}".format(
                 FONT_SIZE_ANSWER))
             self._content.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
-                              QtWidgets.QSizePolicy.Expanding)
-            self._content.setWordWrap(True);
+                                        QtWidgets.QSizePolicy.Expanding)
+            self._content.setWordWrap(True)
         elif self._answer.is_image():
             self._content = ImageWidget(filename=self._answer.get_path())
             self._content.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
-                              QtWidgets.QSizePolicy.Expanding)
+                                        QtWidgets.QSizePolicy.Expanding)
         elif self._answer.is_audio():
             self._content = QtWidgets.QPushButton("Start")
             self._content.clicked.connect(self._audio_toggle)
@@ -81,14 +81,9 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
 
         # play waiting music
         if self._answer.is_audio():
-            url= QtCore.QUrl.fromLocalFile(self._answer.get_path())
+            self._main.audio_play(self._answer.get_path())
         else:
-            url= QtCore.QUrl.fromLocalFile(AUDIO_WAITING)
-
-        content= QMediaContent(url)
-        self.audio_player = QMediaPlayer()
-        self.audio_player.setMedia(content)
-        self._audio_play()
+            self._main.audio_play(AUDIO_WAITING)
 
     def hideEvent(self, event):
         self._audio_stop()
@@ -149,19 +144,19 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
         self.cancelButton.setEnabled(status)
 
     def _audio_play(self):
-        self.audio_player.play()
+        self._main.audio_play()
 
         if self._answer.is_audio():
             self._content.setText("Stop")
 
     def _audio_stop(self):
-        self.audio_player.stop()
+        self._main.audio_stop()
 
         if self._answer.is_audio():
             self._content.setText("Start")
 
     def _audio_toggle(self):
-        if self.audio_player.state() == QMediaPlayer.PlayingState:
+        if self._main.audio_playing():
             self._audio_stop()
         else:
             self._audio_play()
