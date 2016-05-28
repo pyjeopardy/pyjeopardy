@@ -1,4 +1,5 @@
-from PyQt5 import QtCore, QtWidgets, QtMultimedia, QtGui
+from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 
 from pyjeopardy.config import FONT_SIZE_ANSWER, FONT_SIZE_CUR_PLAYER, \
     AUDIO_WAITING
@@ -13,6 +14,7 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
         self._answer = kwargs.pop('answer')
 
         self._current_player = None
+        self._content = None
 
         super(JeopardyAnswerWidget, self).__init__(*args, **kwargs)
 
@@ -21,20 +23,24 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
         self.setLayout(vbox)
 
         # content
-        tmp = None
         if self._answer.is_text():
-            tmp = QtWidgets.QLabel(self._answer.get_text())
-            tmp.setStyleSheet("QLabel {{ font-size: {}px; }}".format(
+            self._content = QtWidgets.QLabel(self._answer.get_text())
+            self._content.setStyleSheet("QLabel {{ font-size: {}px; }}".format(
                 FONT_SIZE_ANSWER))
-            tmp.setWordWrap(True);
+            self._content.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                              QtWidgets.QSizePolicy.Expanding)
+            self._content.setWordWrap(True);
         elif self._answer.is_image():
-            tmp = ImageWidget(filename=self._answer.get_path())
+            self._content = ImageWidget(filename=self._answer.get_path())
+            self._content.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                              QtWidgets.QSizePolicy.Expanding)
+        elif self._answer.is_audio():
+            self._content = QtWidgets.QPushButton("Start")
+            self._content.clicked.connect(self._audio_toggle)
         # <- add further types here
 
-        if tmp:
-            tmp.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
-                              QtWidgets.QSizePolicy.Expanding)
-            vbox.addWidget(tmp, alignment=QtCore.Qt.AlignCenter)
+        if self._content:
+            vbox.addWidget(self._content, alignment=QtCore.Qt.AlignCenter)
         else:
             print("ERROR: unsupported answer type")
 
@@ -73,15 +79,19 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
 
         vbox.addLayout(buttons_box)
 
-        # play sound
-        url= QtCore.QUrl.fromLocalFile(AUDIO_WAITING)
-        content= QtMultimedia.QMediaContent(url)
-        self.audio_player = QtMultimedia.QMediaPlayer()
+        # play waiting music
+        if self._answer.is_audio():
+            url= QtCore.QUrl.fromLocalFile(self._answer.get_path())
+        else:
+            url= QtCore.QUrl.fromLocalFile(AUDIO_WAITING)
+
+        content= QMediaContent(url)
+        self.audio_player = QMediaPlayer()
         self.audio_player.setMedia(content)
-        self.audio_player.play()
+        self._audio_play()
 
     def hideEvent(self, event):
-        self.audio_player.stop()
+        self._audio_stop()
 
         super(JeopardyAnswerWidget, self).hideEvent(event)
 
@@ -128,7 +138,7 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
             self.currentPlayerLabel.setText(self._current_player.name)
             self._enable_result_buttons(True)
 
-            self.audio_player.stop()
+            self._audio_stop()
         else:
             self.currentPlayerLabel.setText("")
             self._enable_result_buttons(False)
@@ -137,3 +147,21 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
         self.rightButton.setEnabled(status)
         self.wrongButton.setEnabled(status)
         self.cancelButton.setEnabled(status)
+
+    def _audio_play(self):
+        self.audio_player.play()
+
+        if self._answer.is_audio():
+            self._content.setText("Stop")
+
+    def _audio_stop(self):
+        self.audio_player.stop()
+
+        if self._answer.is_audio():
+            self._content.setText("Start")
+
+    def _audio_toggle(self):
+        if self.audio_player.state() == QMediaPlayer.PlayingState:
+            self._audio_stop()
+        else:
+            self._audio_play()

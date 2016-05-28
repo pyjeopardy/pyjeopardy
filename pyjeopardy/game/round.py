@@ -83,6 +83,9 @@ class Round:
         if "image" in json:
             answer_type = Answer.IMAGE
             data = os.path.join(base_dir, json["image"])
+        elif "audio" in json:
+            answer_type = Answer.AUDIO
+            data = os.path.join(base_dir, json["audio"])
         else:
             answer_type = Answer.TEXT
 

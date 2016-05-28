@@ -17,13 +17,16 @@ class Answer:
     def is_image(self):
         return self._type == Answer.IMAGE
 
+    def is_audio(self):
+        return self._type == Answer.AUDIO
+
     def get_text(self):
         if self.is_text():
             return self._data
         return None
 
     def get_path(self):
-        if self.is_image():
+        if self.is_image() or self.is_audio():
             return self._data
         return None
 
