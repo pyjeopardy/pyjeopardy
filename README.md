@@ -13,6 +13,64 @@ Simply execute ./run.sh on Linux.
 
 On other systems you have to run the pyjeopardy module: python3 -m pyjeopardy
 
+Creating rounds
+===============
+
+A round is defined in one JSON file with the following structure:
+
+    {
+        "name": "Example round",
+        "categories": [
+            {
+                "name": "Test 1",
+                "answers": [
+                    {
+                        "answer": "42",
+                        "question": "Cool?",
+                        "doublejeopardy": false
+                    },
+                    {
+                        "answer": "43",
+                        "question": "Uncool?",
+                        "doublejeopardy": true
+                    }
+                ]
+            },
+            {
+                "name": "Test 2",
+                "answers": [
+                    {
+                        "image": "imgs/lol.png",
+                        "question": "Foo bar?",
+                        "doublejeopardy": false
+                    },
+                    {
+                        "audio": "imgs/fanzy.mp3",
+                        "question": "Baz?",
+                        "doublejeopardy": true
+                    },
+                    ...
+                ]
+            },
+        ]
+    }
+
+There can be as many categories as you wish, the limit is the width of your
+monitor. The number of answers per category is also variable and can even vary
+for each category.
+
+This are the possible answer types:
+
+ * answer (simple text)
+ * image
+ * audio
+
+The path to the images or audio files must be relative to the JSON file.
+
+An example can be found in answers/example.json.
+
+**Note: the double jeopardy is not implemented at the moment.**
+
 License
 =======
 

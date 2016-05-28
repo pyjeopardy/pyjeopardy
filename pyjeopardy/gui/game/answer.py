@@ -35,7 +35,7 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
             self._content.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
                                         QtWidgets.QSizePolicy.Expanding)
         elif self._answer.is_audio():
-            self._content = QtWidgets.QPushButton("Start")
+            self._content = QtWidgets.QPushButton("Stop")
             self._content.clicked.connect(self._audio_toggle)
         # <- add further types here
 
