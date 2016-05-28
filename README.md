@@ -6,6 +6,13 @@ Dependencies
 * python3-pyqt5.qtmultimedia
 * python3-serial
 
+Start
+=====
+
+Simply execute ./run.sh on Linux.
+
+On other systems you have to run the pyjeopardy module: python3 -m pyjeopardy
+
 License
 =======
 
