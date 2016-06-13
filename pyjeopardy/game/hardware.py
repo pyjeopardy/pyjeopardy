@@ -17,6 +17,21 @@ class Hardware:
                 return key
         return None
 
+    def connect(self):
+        pass
+
+    def disconnect(self):
+        pass
+
+    def start(self, callback):
+        """
+        callback receives hardware and key
+        """
+        pass
+
+    def stop(self):
+        pass
+
 
 class HardwareError(Exception):
     def __init__(self, hardware, error):

@@ -56,3 +56,19 @@ class Game:
                 keys.append(player.key)
 
         return keys
+
+    def connect_hardware(self):
+        for hw in self.hardware:
+            hw.connect()
+
+    def disconnect_hardware(self):
+        for hw in self.hardware:
+            hw.disconnect()
+
+    def start_hardware(self, callback):
+        for hw in self.hardware:
+            hw.start(callback)
+
+    def stop_hardware(self):
+        for hw in self.hardware:
+            hw.stop()

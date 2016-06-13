@@ -85,8 +85,12 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
         else:
             self._main.audio_play(AUDIO_WAITING)
 
+        # start hardware
+        self._game.start_hardware(self.hardware_event)
+
     def hideEvent(self, event):
         self._audio_stop()
+        self._game.stop_hardware()
 
         super(JeopardyAnswerWidget, self).hideEvent(event)
 
@@ -100,10 +104,12 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
     def wrong(self):
         self._update_points(-1 * self._answer.get_points())
         self._player_answers(None)
+        self._game.start_hardware(self.hardware_event)
 
     def cancel(self):
         self._update_points(0)
         self._player_answers(None)
+        self._game.start_hardware(self.hardware_event)
 
     def _update_points(self, points):
         self._current_player.add_points(points)
@@ -114,6 +120,8 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
             self.hardware_event(self._game.keyboard, e.key())
 
     def hardware_event(self, hardware, key):
+        self._game.stop_hardware()
+
         if not self._current_player:
             # search for player
             sel_player = None

@@ -1,7 +1,8 @@
 from pyjeopardy.game import Hardware, HardwareError
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 
+import serial
 import serial.tools.list_ports
 
 class Buzzer(Hardware):
@@ -10,23 +11,83 @@ class Buzzer(Hardware):
 
         self.configdialog = BuzzerConfigDialog
 
+        self.pollinterval = 20  # ms
+
         self.tty = ""
+
+        self._ser = None
+
+        self._input_buffer = ""
+
+        self._timer = QtCore.QTimer()
+        self._timer.setInterval(self.pollinterval)
+        self._timer.timeout.connect(self.update)
+        self._timer.start()
+
+        self._callback = None
 
         for key in range(1, 21):
             self.all_keys[key] = str(key)
-
-    def init(self):
-        pass
 
     def detect_ttys(self):
         result = []
         for tty in serial.tools.list_ports.comports():
             result.append((tty.device, tty.description))
 
-            # try auto detection using the description
             #if not self.tty:
+            #    try auto detection using the description
             #    self.tty = tty.device
         return result
+
+    def connect(self):
+        if self.tty:
+            self._ser = serial.Serial(self.tty)
+
+        self.stop()
+
+        # TODO: error handling
+
+    def disconnect(self):
+        if self._ser:
+            self._ser.write(b'reset\n')
+            self._ser.close()
+            self._ser = None
+
+    def start(self, callback):
+        if self._ser:
+            self._ser.write(b'start\n')
+            self._callback = callback
+
+    def stop(self):
+        if self._ser:
+            self._ser.write(b'reset\n')
+
+    def update(self):
+        if self.active and self._ser:
+            # read waiting bytes
+            count = self._ser.in_waiting
+            if count > 0:
+                self._input_buffer += self._ser.read(count).decode("utf-8")
+
+            # split in lines
+            tmp = self._input_buffer.split('\n')
+
+            if self._input_buffer.endswith('\n'):
+                self._input_buffer = ""
+            else:
+                self._input_buffer = tmp.pop()
+
+            # handle lines
+            while len(tmp) > 0:
+                input_str = tmp.pop(0)
+
+                if input_str != "ready" and input_str != "":
+                    try:
+                        number = int(input_str)
+
+                        self._callback(self, number)
+                    except ValueError:
+                        pass  # TODO: error handling
 
 class BuzzerConfigDialog(QtWidgets.QDialog):
     def __init__(self, hardware, parent=None):

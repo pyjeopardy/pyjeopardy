@@ -84,6 +84,9 @@ class JeopardyMain(QtWidgets.QMainWindow):
         # reset game log
         self._game.reset_log_and_points()
 
+        # connect hardware
+        self._game.connect_hardware()
+
         # get currently selected round
         cur_round = self.controlWidget.get_selected_round()
 
@@ -97,6 +100,9 @@ class JeopardyMain(QtWidgets.QMainWindow):
         self.abortGameAction.setEnabled(True)
 
     def stop_game(self):
+        # disconnect hardware
+        self._game.disconnect_hardware()
+
         # delete widgets
         self._close_all_widgets()
 
