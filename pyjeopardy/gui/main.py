@@ -81,11 +81,17 @@ class JeopardyMain(QtWidgets.QMainWindow):
                 self.menuBar().setVisible(True)
 
     def start_game(self):
+        # connect hardware
+        try:
+            self._game.connect_hardware()
+        except HardwareError as e:
+            errorBox = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
+                "Hardware error", str(e))
+            errorBox.exec_()
+            return
+
         # reset game log
         self._game.reset_log_and_points()
-
-        # connect hardware
-        self._game.connect_hardware()
 
         # get currently selected round
         cur_round = self.controlWidget.get_selected_round()
@@ -101,7 +107,10 @@ class JeopardyMain(QtWidgets.QMainWindow):
 
     def stop_game(self):
         # disconnect hardware
-        self._game.disconnect_hardware()
+        try:
+            self._game.disconnect_hardware()
+        except HardwareError as e:
+            pass  # an error message is not useful here
 
         # delete widgets
         self._close_all_widgets()

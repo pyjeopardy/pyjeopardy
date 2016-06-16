@@ -5,6 +5,7 @@ from .points import JeopardyPointsWidget
 
 from pyjeopardy.config import FONT_SIZE_ANSWER_POINTS, FONT_SIZE_CATEGORIES, \
     FONT_SIZE_ROUND_NAME, FONT_SIZE_LOG
+from pyjeopardy.game import HardwareError
 
 class JeopardyGameWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
@@ -62,11 +63,19 @@ class JeopardyGameWidget(QtWidgets.QWidget):
                 self.answersGrid.addWidget(tmp, answer_num+1, cat_num)
 
     def open_answer(self, answer, button):
+        try:
+            answerwidget = JeopardyAnswerWidget(answer=answer, gamewidget=self,
+                                                game=self._game,
+                                                main=self._main)
+        except HardwareError as e:
+            errorBox = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
+                "Hardware error", str(e))
+            errorBox.exec_()
+            return
+
         self._cur_answer = answer
         self._cur_button = button
 
-        answerwidget = JeopardyAnswerWidget(answer=answer, gamewidget=self,
-                                            game=self._game, main=self._main)
         self._main.show_answer(answerwidget)
 
     def close_answer(self):

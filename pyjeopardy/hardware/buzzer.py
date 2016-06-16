@@ -5,13 +5,15 @@ from PyQt5 import QtWidgets, QtCore
 import serial
 import serial.tools.list_ports
 
+
 class Buzzer(Hardware):
+    POLLINTERVAL = 20  # ms
+    HW_DESCRIPTION = 'Arduino Micro'
+
     def __init__(self):
         super(Buzzer, self).__init__("Buzzer")
 
         self.configdialog = BuzzerConfigDialog
-
-        self.pollinterval = 20  # ms
 
         self.tty = ""
 
@@ -20,7 +22,8 @@ class Buzzer(Hardware):
         self._input_buffer = ""
 
         self._timer = QtCore.QTimer()
-        self._timer.setInterval(self.pollinterval)
+        self._timer.setInterval(Buzzer.POLLINTERVAL)
+        # self._timer.setSingleShot(True)
         self._timer.timeout.connect(self.update)
         self._timer.start()
 
@@ -29,65 +32,96 @@ class Buzzer(Hardware):
         for key in range(1, 21):
             self.all_keys[key] = str(key)
 
+        # trigger auto detection
+        self.detect_ttys()
+
     def detect_ttys(self):
         result = []
         for tty in serial.tools.list_ports.comports():
             result.append((tty.device, tty.description))
 
-            #if not self.tty:
-            #    try auto detection using the description
-            #    self.tty = tty.device
+            # try auto detection
+            if not self.tty and Buzzer.HW_DESCRIPTION in tty.description:
+                self.tty = tty.device
         return result
 
     def connect(self):
         if self.tty:
-            self._ser = serial.Serial(self.tty)
+            try:
+                self._ser = serial.Serial(self.tty)
+            except serial.SerialException as e:
+                raise HardwareError(self, "Cannot connect: " + str(e))
+        else:
+            raise HardwareError(self, "No serial port selected")
 
         self.stop()
 
-        # TODO: error handling
-
     def disconnect(self):
         if self._ser:
-            self._ser.write(b'reset\n')
-            self._ser.close()
+            try:
+                self._ser.write(b'reset\n')
+            except serial.SerialException as e:
+                raise HardwareError(self, "Cannot send command: " + str(e))
+
+            try:
+                self._ser.close()
+            except serial.SerialException as e:
+                raise HardwareError(self, "Cannot close connection: " + str(e))
+
             self._ser = None
 
     def start(self, callback):
         if self._ser:
-            self._ser.write(b'start\n')
+            try:
+                self._ser.write(b'start\n')
+            except serial.SerialException as e:
+                raise HardwareError(self, "Cannot send command: " + str(e))
+
             self._callback = callback
 
     def stop(self):
         if self._ser:
-            self._ser.write(b'reset\n')
+            try:
+                self._ser.write(b'reset\n')
+            except serial.SerialException as e:
+                raise HardwareError(self, "Cannot send command: " + str(e))
 
     def update(self):
         if self.active and self._ser:
-            # read waiting bytes
-            count = self._ser.in_waiting
-            if count > 0:
-                self._input_buffer += self._ser.read(count).decode("utf-8")
+            try:
+                # read waiting bytes
+                count = self._ser.in_waiting
+                if count > 0:
+                    self._input_buffer += self._ser.read(count).decode("utf-8")
 
-            # split in lines
-            tmp = self._input_buffer.split('\n')
+                if self._input_buffer:
+                    # split in lines
+                    tmp = self._input_buffer.split('\n')
 
-            if self._input_buffer.endswith('\n'):
-                self._input_buffer = ""
-            else:
-                self._input_buffer = tmp.pop()
+                    if self._input_buffer.endswith('\n'):
+                        self._input_buffer = ""
+                    else:
+                        self._input_buffer = tmp.pop()
 
-            # handle lines
-            while len(tmp) > 0:
-                input_str = tmp.pop(0)
+                    # handle lines
+                    while len(tmp) > 0:
+                        input_str = tmp.pop(0)
 
-                if input_str != "ready" and input_str != "":
-                    try:
-                        number = int(input_str)
+                        if input_str != "ready" and input_str != "":
+                            try:
+                                number = int(input_str)
 
-                        self._callback(self, number)
-                    except ValueError:
-                        pass  # TODO: error handling
+                                self._callback(self, number)
+                            except ValueError as e:
+                                raise HardwareError(self, "Invalid response "
+                                                    "from hardware" + str(e))
+            except (serial.SerialException, OSError) as e:
+                pass  # TODO: better error handling, maybe set a flag?
+            # finally:
+            #     self._timer.start()
+        # else:
+        #         self._timer.start()
+
 
 class BuzzerConfigDialog(QtWidgets.QDialog):
     def __init__(self, hardware, parent=None):
@@ -121,8 +155,8 @@ class BuzzerConfigDialog(QtWidgets.QDialog):
 
         # save
         saveButton = QtWidgets.QPushButton("Save")
-        saveButton.setDefault(True);
-        saveButton.setAutoDefault(True);
+        saveButton.setDefault(True)
+        saveButton.setAutoDefault(True)
         saveButton.clicked.connect(self.save)
 
         # cancel

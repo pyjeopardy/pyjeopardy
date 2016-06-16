@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtWidgets
 
 from pyjeopardy.config import FONT_SIZE_ANSWER, FONT_SIZE_CUR_PLAYER, \
     AUDIO_WAITING
+from pyjeopardy.game import HardwareError
 
 from .image import ImageWidget
 
@@ -17,6 +18,9 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
         self._content = None
 
         super(JeopardyAnswerWidget, self).__init__(*args, **kwargs)
+
+        # start hardware, raises error
+        self._game.start_hardware(self.hardware_event)
 
         # layout
         vbox = QtWidgets.QVBoxLayout()
@@ -85,12 +89,13 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
         else:
             self._main.audio_play(AUDIO_WAITING)
 
-        # start hardware
-        self._game.start_hardware(self.hardware_event)
-
     def hideEvent(self, event):
         self._audio_stop()
-        self._game.stop_hardware()
+
+        try:
+            self._game.stop_hardware()
+        except HardwareError as e:
+            pass  # what should we do? we want to quit anyway
 
         super(JeopardyAnswerWidget, self).hideEvent(event)
 
@@ -102,14 +107,28 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
         self._gamewidget.close_answer()
 
     def wrong(self):
+        try:
+            self._game.start_hardware(self.hardware_event)
+        except HardwareError as e:
+            errorBox = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
+                "Hardware error", str(e))
+            errorBox.exec_()
+            return
+
         self._update_points(-1 * self._answer.get_points())
         self._player_answers(None)
-        self._game.start_hardware(self.hardware_event)
 
     def cancel(self):
+        try:
+            self._game.start_hardware(self.hardware_event)
+        except HardwareError as e:
+            errorBox = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
+                "Hardware error", str(e))
+            errorBox.exec_()
+            return
+
         self._update_points(0)
         self._player_answers(None)
-        self._game.start_hardware(self.hardware_event)
 
     def _update_points(self, points):
         self._current_player.add_points(points)
@@ -120,7 +139,12 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
             self.hardware_event(self._game.keyboard, e.key())
 
     def hardware_event(self, hardware, key):
-        self._game.stop_hardware()
+        #try:
+        #    self._game.stop_hardware()
+        #except HardwareError as e:
+        #    errorBox = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
+        #        "Hardware error", str(e))
+        #    errorBox.exec_()
 
         if not self._current_player:
             # search for player
