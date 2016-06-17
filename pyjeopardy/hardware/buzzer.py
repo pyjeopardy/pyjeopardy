@@ -1,4 +1,5 @@
 from pyjeopardy.game import Hardware, HardwareError
+from pyjeopardy.config import HARDWARE_POLLINTERVAL
 
 from PyQt5 import QtWidgets, QtCore
 
@@ -7,7 +8,6 @@ import serial.tools.list_ports
 
 
 class Buzzer(Hardware):
-    POLLINTERVAL = 20  # ms
     HW_DESCRIPTION = 'Arduino Micro'
 
     def __init__(self):
@@ -22,8 +22,7 @@ class Buzzer(Hardware):
         self._input_buffer = ""
 
         self._timer = QtCore.QTimer()
-        self._timer.setInterval(Buzzer.POLLINTERVAL)
-        # self._timer.setSingleShot(True)
+        self._timer.setInterval(HARDWARE_POLLINTERVAL)
         self._timer.timeout.connect(self.update)
         self._timer.start()
 

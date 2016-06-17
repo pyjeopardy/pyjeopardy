@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Jeopardy</title>
+
+        <style>
+            body
+            {
+                margin: 0;
+                padding: 0;
+            }
+
+            button
+            {
+                background-color: #ff0000;
+
+                width: 90%;
+                height: 90%;
+
+                top: 5%;
+                left: 5%;
+
+                position: absolute;
+            }
+
+            button:active
+            {
+                background-color: #bb0000;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div>
+         <button type="button" onclick="buzzer()"></button>
+         </div>
+
+        <script>
+            function buzzer() {
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("POST", "/", true);
+                xhttp.send();
+            }
+        </script>
+    </body>
+</html>

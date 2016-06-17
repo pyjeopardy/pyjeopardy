@@ -39,4 +39,7 @@ AUDIO_WAITING = os.path.join(MEDIA_DIR, 'jeopardy.wav')
 
 # list of available hardware
 # format: (module path, class name)
-HARDWARE = [('pyjeopardy.hardware.buzzer', 'Buzzer')]
+HARDWARE = [('pyjeopardy.hardware.buzzer', 'Buzzer'),
+            ('pyjeopardy.hardware.webserver', 'Webserver')]
+
+HARDWARE_POLLINTERVAL = 20  # ms
