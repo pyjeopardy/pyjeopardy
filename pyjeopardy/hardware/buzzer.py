@@ -29,7 +29,7 @@ class Buzzer(Hardware):
 
         self._callback = None
 
-        for key in range(1, 21):
+        for key in range(1, 19):
             self.all_keys[key] = str(key)
 
         # trigger auto detection
