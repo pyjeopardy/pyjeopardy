@@ -13,5 +13,9 @@ Session.vim
 *.pot
 __pycache__
 
+/build/
+/dist/
+*.egg-info
+
 # project
-/answers
+/answers/
