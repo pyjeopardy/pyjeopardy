@@ -20,7 +20,7 @@ setup(
     long_description=__doc__,
     zip_safe=False,
     include_package_data=True,
-    platforms='UNIX',
+    platforms='any',
     setup_requires=[],
     install_requires=[
         'pyqt5',
