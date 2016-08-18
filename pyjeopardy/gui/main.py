@@ -90,11 +90,11 @@ class JeopardyMain(QtWidgets.QMainWindow):
             errorBox.exec_()
             return
 
-        # reset game log
-        self._game.reset_log_and_points()
-
         # get currently selected round
         cur_round = self.controlWidget.get_selected_round()
+
+        # reset game log
+        self._game.reset_log_and_points(cur_round)
 
         # create widget
         gameWidget = JeopardyGameWidget(game=self._game, round=cur_round,
@@ -118,9 +118,9 @@ class JeopardyMain(QtWidgets.QMainWindow):
         # update menu
         self.abortGameAction.setEnabled(False)
 
-    def show_answer(self, answerwidget):
-        self.content.addWidget(answerwidget)
-        self.content.setCurrentWidget(answerwidget)
+    def show_widget(self, widget):
+        self.content.addWidget(widget)
+        self.content.setCurrentWidget(widget)
 
     def close_answer(self):
         tmp = self.content.currentWidget()

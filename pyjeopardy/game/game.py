@@ -26,8 +26,8 @@ class Game:
 
         self.free_colors = deepcopy(config.COLORS)
 
-    def reset_log_and_points(self):
-        self.log = Log()
+    def reset_log_and_points(self, cur_round):
+        self.log = Log(cur_round)
 
         for p in self.players:
             p.reset_points()

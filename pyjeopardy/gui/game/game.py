@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets
 
 from .answer import JeopardyAnswerWidget
+from .end import JeopardyEndWidget
 from .points import JeopardyPointsWidget
 
 from pyjeopardy.config import FONT_SIZE_ANSWER_POINTS, FONT_SIZE_CATEGORIES, \
@@ -76,16 +77,22 @@ class JeopardyGameWidget(QtWidgets.QWidget):
         self._cur_answer = answer
         self._cur_button = button
 
-        self._main.show_answer(answerwidget)
+        self._main.show_widget(answerwidget)
 
     def close_answer(self):
         self._main.close_answer()
+
+        self._game.log.answer_closed(self._cur_answer)
 
         self.points.update()
         self._disable_button(self._cur_answer, self._cur_button)
 
         self._cur_answer = None
         self._cur_button = None
+
+        if self._game.log.round_finished():
+            endwidget = JeopardyEndWidget(main=self._main, game=self._game)
+            self._main.show_widget(endwidget)
 
     def _disable_button(self, answer, button):
         button.setEnabled(False)
@@ -105,7 +112,7 @@ class JeopardyGameWidget(QtWidgets.QWidget):
         button.setText("\n".join(new_label))
 
         # color
-        player = self._game.log.get_winner(answer)
+        player = self._game.log.get_winner_of_answer(answer)
         if player:
             bg = player.color.rgb()
             fg = player.color.textcolor_rgb()

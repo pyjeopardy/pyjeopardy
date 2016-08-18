@@ -22,7 +22,7 @@ class Webserver(Hardware):
     _queue = Queue()
 
     def __init__(self):
-        super(Webserver, self).__init__("Webserver")
+        super(Webserver, self).__init__("Webserver (EXPERIMENTAL)")
 
         self.configdialog = None
 
