@@ -64,6 +64,19 @@ class JeopardyGameWidget(QtWidgets.QWidget):
                 self.answersGrid.addWidget(tmp, answer_num+1, cat_num)
 
     def open_answer(self, answer, button):
+        if answer.is_double():
+            #TODO: show JeopardyDoubleWidget(game=self._game,
+            #                                answer=answer,
+            #                                player=TODO)
+            # Where can we get the currently answer-selecting player from? Has
+            # to be passed to the JeopardyDoubleWidget and JeopardyAnswerWidget
+            # has to be adapted to accept a new player= kwarg.
+            #
+            # We need to store the selection from the JeopardyDoubleWidget
+            # somewhere and make sure it is used in the JeopardyAnswerWidget
+            # correctly afterwards.
+            pass
+
         try:
             answerwidget = JeopardyAnswerWidget(answer=answer, gamewidget=self,
                                                 game=self._game,
