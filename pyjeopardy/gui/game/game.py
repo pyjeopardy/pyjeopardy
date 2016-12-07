@@ -69,9 +69,8 @@ class JeopardyGameWidget(QtWidgets.QWidget):
                                                 game=self._game,
                                                 main=self._main)
         except HardwareError as e:
-            errorBox = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
-                "Hardware error", str(e))
-            errorBox.exec_()
+            QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
+                                  "Hardware error", str(e)).exec_()
             return
 
         self._cur_answer = answer
