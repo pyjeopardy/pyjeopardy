@@ -116,10 +116,6 @@ class Buzzer(Hardware):
                                                     "from hardware" + str(e))
             except (serial.SerialException, OSError) as e:
                 pass  # TODO: better error handling, maybe set a flag?
-            # finally:
-            #     self._timer.start()
-        # else:
-        #         self._timer.start()
 
 
 class BuzzerConfigDialog(QtWidgets.QDialog):
