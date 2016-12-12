@@ -24,8 +24,6 @@ class Game:
 
             self.hardware.append(hw())
 
-        self.free_colors = deepcopy(config.COLORS)
-
     def reset_log_and_points(self, cur_round):
         self.log = Log(cur_round)
 
@@ -36,9 +34,20 @@ class Game:
         self.rounds.append(round)
 
     def add_player(self, player):
-        self.free_colors.remove(player.color)
-
         self.players.append(player)
+
+    @property
+    def free_colors(self):
+        used_colors = []
+        for player in self.players:
+            used_colors.append(player.color)
+
+        free_colors = []
+        for color in config.COLORS:
+            if color not in used_colors:
+                free_colors.append(color)
+
+        return free_colors
 
     def is_active_hardware(self):
         for hw in self.hardware:
