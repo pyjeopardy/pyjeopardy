@@ -162,3 +162,13 @@ class JeopardyMain(QtWidgets.QMainWindow):
 
     def audio_playing(self):
         return self._audio_player.state() == QMediaPlayer.PlayingState
+
+    def closeEvent(self, event):
+        msg = QtWidgets.QMessageBox.question(self, "Exit?", "Are you sure?",
+                                             QtWidgets.QMessageBox.Yes,
+                                             QtWidgets.QMessageBox.No)
+
+        if msg == QtWidgets.QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()

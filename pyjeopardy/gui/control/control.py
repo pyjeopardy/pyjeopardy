@@ -36,7 +36,7 @@ class JeopardyControlWidget(QtWidgets.QWidget):
 
     def update_buttons(self):
         self.update_play_status()
-        self.playersWidget.update_add_status()
+        self.playersWidget.update_buttons()
 
     def update_play_status(self):
         if self.roundsWidget.get_selected_round() and \
