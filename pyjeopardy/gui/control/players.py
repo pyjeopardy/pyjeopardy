@@ -29,12 +29,15 @@ class JeopardyPlayersWidget(QtWidgets.QWidget):
         self.deleteButton.clicked.connect(self.delete_player)
 
         # layout
+        hbox_buttons = QtWidgets.QHBoxLayout()
+        hbox_buttons.addWidget(self.addButton)
+        hbox_buttons.addWidget(self.editButton)
+        hbox_buttons.addWidget(self.deleteButton)
+
         vbox = QtWidgets.QVBoxLayout()
         vbox.addWidget(title)
         vbox.addWidget(self.listWidget)
-        vbox.addWidget(self.addButton)
-        vbox.addWidget(self.editButton)
-        vbox.addWidget(self.deleteButton)
+        vbox.addLayout(hbox_buttons)
 
         self.setLayout(vbox)
 
