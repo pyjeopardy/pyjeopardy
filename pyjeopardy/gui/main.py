@@ -62,16 +62,16 @@ class JeopardyMain(QtWidgets.QMainWindow):
         exitAction.triggered.connect(self.close)
         gameMenu.addAction(exitAction)
 
-        # menu -> config
-        configMenu = menubar.addMenu('&Configuration')
+        ## menu -> config
+        #configMenu = menubar.addMenu('&Configuration')
 
-        # menu -> config -> load
-        loadConfigAction = QtWidgets.QAction('&Load', self)
-        configMenu.addAction(loadConfigAction)
+        ## menu -> config -> load
+        #loadConfigAction = QtWidgets.QAction('&Load', self)
+        #configMenu.addAction(loadConfigAction)
 
-        # menu -> config -> save
-        saveConfigAction = QtWidgets.QAction('&Save', self)
-        configMenu.addAction(saveConfigAction)
+        ## menu -> config -> save
+        #saveConfigAction = QtWidgets.QAction('&Save', self)
+        #configMenu.addAction(saveConfigAction)
 
     def changeEvent(self, event):
         if event.type() == QtCore.QEvent.WindowStateChange:
