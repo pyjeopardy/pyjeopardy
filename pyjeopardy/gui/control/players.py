@@ -24,12 +24,17 @@ class JeopardyPlayersWidget(QtWidgets.QWidget):
         self.editButton = QtWidgets.QPushButton("Edit")
         self.editButton.clicked.connect(self.edit_player)
 
+        # delete button
+        self.deleteButton = QtWidgets.QPushButton("Delete")
+        self.deleteButton.clicked.connect(self.delete_player)
+
         # layout
         vbox = QtWidgets.QVBoxLayout()
         vbox.addWidget(title)
         vbox.addWidget(self.listWidget)
         vbox.addWidget(self.addButton)
         vbox.addWidget(self.editButton)
+        vbox.addWidget(self.deleteButton)
 
         self.setLayout(vbox)
 
@@ -43,17 +48,36 @@ class JeopardyPlayersWidget(QtWidgets.QWidget):
         self.parent().update_play_status()
 
     def edit_player(self):
-        item = self.listWidget.selectedItems()
-        if len(item) != 1:
-            return  # should not happen
-        item = item[0]
-        player = item.data(QtCore.Qt.UserRole)
+        player = self._get_sel_player()
+        if not player:
+            return  # should not happen since button is disabled
 
         dialog = EditPlayerDialog(self._game, self, player=player)
         dialog.exec_()
 
         self.update()
 
+    def delete_player(self):
+        player = self._get_sel_player()
+        if not player:
+            return  # should not happen since button is disabled
+
+        text = "Delete player {}?".format(player.name)
+        msg = QtWidgets.QMessageBox.question(self, "Delete player?", text,
+                                             QtWidgets.QMessageBox.Yes,
+                                             QtWidgets.QMessageBox.No)
+
+        if msg == QtWidgets.QMessageBox.Yes:
+            self._game.delete_player(player)
+            self.update()
+            self.parent().update_play_status()
+
+    def _get_sel_player(self):
+        item = self.listWidget.selectedItems()
+
+        if len(item) != 1:
+            return  None
+        return item[0].data(QtCore.Qt.UserRole)
 
     def update(self):
         # update list
@@ -78,8 +102,10 @@ class JeopardyPlayersWidget(QtWidgets.QWidget):
         # edit
         if self.listWidget.selectedItems():
             self.editButton.setEnabled(True)
+            self.deleteButton.setEnabled(True)
         else:
             self.editButton.setEnabled(False)
+            self.deleteButton.setEnabled(False)
 
 
 class EditPlayerDialog(QtWidgets.QDialog):

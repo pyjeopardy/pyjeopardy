@@ -36,6 +36,9 @@ class Game:
     def add_player(self, player):
         self.players.append(player)
 
+    def delete_player(self, player):
+        self.players.remove(player)
+
     @property
     def free_colors(self):
         used_colors = []
