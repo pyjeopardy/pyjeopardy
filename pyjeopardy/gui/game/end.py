@@ -15,7 +15,8 @@ class JeopardyEndWidget(QtWidgets.QWidget):
         self.setLayout(vbox)
 
         # content
-        players = sorted(self._game.players, key=lambda p: p.points)
+        players = sorted(self._game.players, key=lambda p: p.points,
+                         reverse=True)
         for player in players:
             tmp = PlayerWidget(player=player)
 
