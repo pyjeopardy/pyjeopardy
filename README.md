@@ -9,9 +9,9 @@ Dependencies
 Start
 =====
 
-Simply execute ./run.sh on Linux.
+Simply execute ./run-pyjeopardy.
 
-On other systems you have to run the pyjeopardy module: python3 -m pyjeopardy
+Alternatively you can start the pyjeopardy module: python3 -m pyjeopardy
 
 Creating rounds
 ===============
@@ -59,7 +59,7 @@ There can be as many categories as you wish, the limit is the width of your
 monitor. The number of answers per category is also variable and can even vary
 for each category.
 
-This are the possible answer types:
+These are the possible answer types:
 
  * answer (simple text)
  * image
@@ -68,6 +68,10 @@ This are the possible answer types:
 The path to the images or audio files must be relative to the JSON file.
 
 An example can be found in answers/example.json.
+
+We recommend to test all answers before playing with people. If an image is
+missing it will not be displayed and there is no warning when the round is
+opened.
 
 **Note: the double jeopardy is not implemented at the moment.**
 
