@@ -1,0 +1,66 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[top=20mm,bottom=20mm,left=20mm,right=20mm]{geometry}
+
+\usepackage{graphicx}
+\usepackage{color}
+
+\usepackage{tikz}
+
+\pagestyle{empty}
+
+\setlength{\parindent}{0mm}
+
+% Font
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\fontfamily{phv}\selectfont
+
+\definecolor{bgcolor}{HTML}{000000}
+\definecolor{fontcolor}{HTML}{FFFFFF}
+
+% Size
+\newlength{\cardwidth}
+\setlength{\cardwidth}{50mm}
+\newlength{\cardheight}
+\setlength{\cardheight}{20mm}
+
+%
+% Parameters:
+% 1: number
+% 2: background color
+% 3: font color
+% 4: color name
+%
+\newcommand*\cardfront[4]{%
+    \definecolor{bgcolor}{HTML}{#2}%
+    \definecolor{fontcolor}{HTML}{#3}%
+    \color{fontcolor}%
+    \begin{tikzpicture}[x=1cm, y=1cm, inner sep=0, outer sep=0, anchor=north west]
+        % background
+        \node (bg) at (0,0) [fill=bgcolor,minimum width=\cardwidth,minimum height=\cardheight] {};
+
+        % text
+        \begin{scope}[shift={(bg.north west)}, x={(bg.north)}, y={(bg.west)}, scale=2]
+            \node at (0.05,0.35) {\Huge\##1};
+
+            \node[rotate=90, text width=\cardheight, align=center] at (0.9,1) {\small #4};
+        \end{scope}
+    \end{tikzpicture}%
+}
+
+%
+% Document
+%
+\begin{document}
+    \centering
+
+    \IfFileExists{tmpdata.tex}{\include{tmpdata}}{%
+        \cardfront{1}{FF0000}{FFFFFF}{bla} \\[1cm]
+        \cardfront{1}{FF00FF}{FF0000}{blub} \\[1cm]
+    }
+
+    \pagebreak
+\end{document}
