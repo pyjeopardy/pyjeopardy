@@ -3,3 +3,5 @@ Bugs
 
 Hardware
  * Reconnect button in Hardware menu (if TTY changes)
+
+youtube-dl -x --audio-format mp3 --audio-quality 0 -o jeopardy.mp3 'https://www.youtube.com/watch?v=0Wi8Fv0AJA4'

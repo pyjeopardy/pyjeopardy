@@ -8,16 +8,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 COLORS=[
     Color("red",        255,    0,      0,      False),
     Color("blue",       0,      0,      255,    True),
-    Color("green",      0,      128,    0,      False),
+    Color("green",      0,      128,    0,      True),
     Color("yellow",     255,    255,    0,      False),
     Color("cyan",       0,      255,    255,    False),
     Color("magenta",    255,    0,      255,    False),
     Color("silver",     192,    192,    192,    False),
-    Color("gray",       128,    128,    128,    False),
     Color("maroon",     128,    0,      0,      True),
-    Color("olive",      128,    128,    0,      False),
+    Color("gray",       128,    128,    128,    True),
+    Color("olive",      128,    128,    0,      True),
     Color("purple",     128,    0,      128,    True),
-    Color("teal",       0,      128,    128,    False),
+    Color("teal",       0,      128,    128,    True),
     Color("navy",       0,      0,      128,    True),
 ]
 

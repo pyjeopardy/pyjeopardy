@@ -51,9 +51,11 @@ class PlayerWidget(QtWidgets.QWidget):
 
         # name
         self.name = QtWidgets.QLabel(self._player.name)
+        self.name.setPalette(p)
 
         # points
         self.points = QtWidgets.QLabel(str(self._player.points))
+        self.points.setPalette(p)
 
         # layout
         hbox = QtWidgets.QHBoxLayout()

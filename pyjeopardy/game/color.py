@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt
 class Color:
     def __init__(self, name, r, g, b, whitefg=False):
         self.name = name
-        self. qt = QColor(r, g, b)
+        self.qt = QColor(r, g, b)
         self.whitefg = whitefg
 
     def rgb(self):
