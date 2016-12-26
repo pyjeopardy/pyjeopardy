@@ -4,7 +4,8 @@ from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from pyjeopardy.game import Game, HardwareError
 
 from .control import JeopardyControlWidget, HardwareDialog
-from .game import JeopardyGameWidget, JeopardyAnswerWidget
+from .game import JeopardyGameWidget, JeopardyAnswerWidget, \
+    JeopardyDoubleWidget
 
 
 class JeopardyMain(QtWidgets.QMainWindow):
@@ -126,6 +127,12 @@ class JeopardyMain(QtWidgets.QMainWindow):
         tmp = self.content.currentWidget()
 
         if type(tmp) == JeopardyAnswerWidget:
+            self._close_cur_widget()
+
+    def close_double_widget(self):
+        tmp = self.content.currentWidget()
+
+        if type(tmp) == JeopardyDoubleWidget:
             self._close_cur_widget()
 
     def configure_hardware(self):

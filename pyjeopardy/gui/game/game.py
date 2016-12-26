@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets
 
 from .answer import JeopardyAnswerWidget
+from .double import JeopardyDoubleWidget
 from .end import JeopardyEndWidget
 from .points import JeopardyPointsWidget
 
@@ -63,8 +64,8 @@ class JeopardyGameWidget(QtWidgets.QWidget):
 
                 self.answersGrid.addWidget(tmp, answer_num+1, cat_num)
 
-    def open_answer(self, answer, button):
-        if answer.is_double():
+    def open_answer(self, answer, button, double_bet=None, double_player=None):
+        if answer.is_double() and not (double_bet and double_player):
             #TODO: show JeopardyDoubleWidget(game=self._game,
             #                                answer=answer,
             #                                player=TODO)
@@ -75,21 +76,29 @@ class JeopardyGameWidget(QtWidgets.QWidget):
             # We need to store the selection from the JeopardyDoubleWidget
             # somewhere and make sure it is used in the JeopardyAnswerWidget
             # correctly afterwards.
-            pass
+            doublewidget = JeopardyDoubleWidget(game=self._game,
+                                                answer=answer,
+                                                button=button,
+                                                game_widget=self)
+            self._main.show_widget(doublewidget)
+        else:
+            try:
+                answerwidget = JeopardyAnswerWidget(answer=answer,
+                                                    gamewidget=self,
+                                                    game=self._game,
+                                                    main=self._main,
+                                                    double_bet=double_bet,
+                                                    double_player=double_player)
+            except HardwareError as e:
+                QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
+                                      "Hardware error", str(e)).exec_()
+                return
 
-        try:
-            answerwidget = JeopardyAnswerWidget(answer=answer, gamewidget=self,
-                                                game=self._game,
-                                                main=self._main)
-        except HardwareError as e:
-            QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical,
-                                  "Hardware error", str(e)).exec_()
-            return
+            self._cur_answer = answer
+            self._cur_button = button
 
-        self._cur_answer = answer
-        self._cur_button = button
-
-        self._main.show_widget(answerwidget)
+            self._main.close_double_widget()  # in case it is open
+            self._main.show_widget(answerwidget)
 
     def close_answer(self):
         self._main.close_answer()

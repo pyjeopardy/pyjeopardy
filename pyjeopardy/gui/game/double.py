@@ -1,44 +1,69 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtCore, QtWidgets
 
-from pyjeopardy.config import FONT_SIZE_CUR_PLAYERS
+from pyjeopardy.config import FONT_SIZE_CUR_PLAYER
 
 
 class JeopardyDoubleWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
         self._game = kwargs.pop('game')
         self._answer = kwargs.pop('answer')
-        self._player = kwargs.pop('player')
+        self._button = kwargs.pop('button')  # not needed here, passed back
+        self._game_widget = kwargs.pop('game_widget')
 
         self._content = None
 
         super(JeopardyDoubleWidget, self).__init__(*args, **kwargs)
 
-        vbox = QtWidgets.QVBoxLayout()
-
         self._label = QtWidgets.QLabel("Double Jeopardy")
 
-        self._name = QtWidgets.QLabel(self._player.name)
-        self._name.setAutoFillBackground(True)
-        p = self._name.palette()
-        p.setColor(self._name.backgroundRole(), self._player.color.qt)
-        p.setColor(self._name.foregroundRole(), self._player.color.textcolor())
-        self._name.setPalette(p)
-        self._name.setStyleSheet("QWidget {{ font-size: {}px; }}".format(
-            FONT_SIZE_PLAYERS))
+        self._listWidget = QtWidgets.QListWidget()
+        self._listWidget.itemSelectionChanged.connect(self.update_buttons)
+
+        for player in self._game.players:
+            item = QtWidgets.QListWidgetItem(player.name)
+            item.setData(QtCore.Qt.UserRole, player)
+
+            self._listWidget.addItem(item)
 
         self._bet = QtWidgets.QSpinBox()
         self._bet.setMaximum(2 * self._answer.get_points())
         self._bet.setValue(self._answer.get_points())
         self._bet.setSingleStep(50)
-        self._editingFinished.connect(self.confirm)
-        #TODO: focus the spinbox?
+        # TODO: minimum?
 
+        self._confirmButton = QtWidgets.QPushButton("Go!")
+        self._confirmButton.clicked.connect(self.confirm)
+        self._confirmButton.setEnabled(False)
+
+        hbox = QtWidgets.QHBoxLayout()
+        hbox.addWidget(self._bet)
+        hbox.addWidget(self._listWidget)
+
+        vbox = QtWidgets.QVBoxLayout()
         vbox.addWidget(self._label)
-        vbox.addWidget(self._name)
-        vbox.addWidget(self._bet)
+        vbox.addLayout(hbox)
+        vbox.addWidget(self._confirmButton)
 
         self.setLayout(vbox)
 
     def confirm(self, event):
-        #TODO: close widget and return self._bet.value()
-        pass
+        player = self._get_sel_player()
+        if not player:
+            return
+
+        self._game_widget.open_answer(self._answer, self._button,
+                               double_bet=self._bet.value(),
+                               double_player=player)
+
+    def update_buttons(self):
+        if self._listWidget.selectedItems():
+            self._confirmButton.setEnabled(True)
+        else:
+            self._confirmButton.setEnabled(False)
+
+    def _get_sel_player(self):
+        item = self._listWidget.selectedItems()
+
+        if len(item) != 1:
+            return  None
+        return item[0].data(QtCore.Qt.UserRole)

@@ -14,13 +14,18 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
         self._answer = kwargs.pop('answer')
         self._main = kwargs.pop('main')
 
+        self._double_bet = kwargs.pop('double_bet')
+        self._double_player = kwargs.pop('double_player')
+        self._is_double = self._double_bet and self._double_player
+
         self._current_player = None
         self._content = None
 
         super(JeopardyAnswerWidget, self).__init__(*args, **kwargs)
 
         # start hardware, raises error
-        self._game.start_hardware(self.hardware_event)
+        if not self._is_double:
+            self._game.start_hardware(self.hardware_event)
 
         # layout
         vbox = QtWidgets.QVBoxLayout()
@@ -83,6 +88,10 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
 
         vbox.addLayout(buttons_box)
 
+        # handle double jeopardy
+        if self._is_double:
+            self._player_answers(self._double_player)
+
         # play waiting music
         if self._answer.is_audio():
             self._main.audio_play(self._answer.get_path())
@@ -103,7 +112,10 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
         self._gamewidget.close_answer()
 
     def right(self):
-        self._update_points(self._answer.get_points())
+        if self._is_double:
+            self._update_points(self._double_bet)
+        else:
+            self._update_points(self._answer.get_points())
         self._gamewidget.close_answer()
 
     def wrong(self):
@@ -115,7 +127,11 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
             errorBox.exec_()
             return
 
-        self._update_points(-1 * self._answer.get_points())
+        if self._is_double:
+            self._update_points(-1 * self._double_bet)
+        else:
+            self._update_points(-1 * self._answer.get_points())
+
         self._player_answers(None)
 
     def cancel(self):
