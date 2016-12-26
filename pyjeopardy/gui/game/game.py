@@ -65,7 +65,7 @@ class JeopardyGameWidget(QtWidgets.QWidget):
                 self.answersGrid.addWidget(tmp, answer_num+1, cat_num)
 
     def open_answer(self, answer, button, double_bet=None, double_player=None):
-        if answer.is_double() and not (double_bet and double_player):
+        if answer.is_double() and double_bet is None and double_player is None:
             #TODO: show JeopardyDoubleWidget(game=self._game,
             #                                answer=answer,
             #                                player=TODO)

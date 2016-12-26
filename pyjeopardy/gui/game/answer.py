@@ -16,7 +16,8 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
 
         self._double_bet = kwargs.pop('double_bet')
         self._double_player = kwargs.pop('double_player')
-        self._is_double = self._double_bet and self._double_player
+        self._is_double = self._double_bet is not None and \
+            self._double_player is not None
 
         self._current_player = None
         self._content = None
