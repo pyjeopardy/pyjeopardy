@@ -42,13 +42,10 @@ class JeopardyDoubleWidget(QtWidgets.QWidget):
         self._confirmButton.clicked.connect(self.confirm)
         self._confirmButton.setEnabled(False)
 
-        hbox = QtWidgets.QHBoxLayout()
-        hbox.addWidget(self._bet)
-        hbox.addWidget(self._listWidget)
-
         vbox = QtWidgets.QVBoxLayout()
         vbox.addWidget(self._label)
-        vbox.addLayout(hbox)
+        vbox.addWidget(self._bet)
+        vbox.addWidget(self._listWidget)
         vbox.addWidget(self._confirmButton)
 
         self.setLayout(vbox)
