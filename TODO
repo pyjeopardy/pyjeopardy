@@ -9,5 +9,3 @@ Better code
    Refactor it so that it is an own widget
 
 youtube-dl -x --audio-format mp3 --audio-quality 0 -o jeopardy.mp3 'https://www.youtube.com/watch?v=0Wi8Fv0AJA4'
-
-double jeopardy: neuer versuch -> doppelte punkte oder normal?

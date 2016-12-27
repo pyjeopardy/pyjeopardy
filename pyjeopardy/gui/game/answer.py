@@ -19,6 +19,8 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
         self._is_double = self._double_bet is not None and \
             self._double_player is not None
 
+        self._first_try = True
+
         self._current_player = None
         self._content = None
 
@@ -113,7 +115,7 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
         self._gamewidget.close_answer()
 
     def right(self):
-        if self._is_double:
+        if self._is_double and self._first_try:
             self._update_points(self._double_bet)
         else:
             self._update_points(self._answer.get_points())
@@ -128,12 +130,14 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
             errorBox.exec_()
             return
 
-        if self._is_double:
+        if self._is_double and self._first_try:
             self._update_points(-1 * self._double_bet)
         else:
             self._update_points(-1 * self._answer.get_points())
 
         self._player_answers(None)
+
+        self._first_try = False
 
     def cancel(self):
         try:
@@ -146,6 +150,8 @@ class JeopardyAnswerWidget(QtWidgets.QWidget):
 
         self._update_points(0)
         self._player_answers(None)
+
+        self._first_try = False
 
     def _update_points(self, points):
         self._current_player.add_points(points)
