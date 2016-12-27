@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtWidgets
 
-from pyjeopardy.config import FONT_SIZE_CUR_PLAYER
+from pyjeopardy.config import FONT_SIZE_DOUBLE, FONT_SIZE_DOUBLE_BET
 
 
 class JeopardyDoubleWidget(QtWidgets.QWidget):
@@ -15,6 +15,11 @@ class JeopardyDoubleWidget(QtWidgets.QWidget):
         super(JeopardyDoubleWidget, self).__init__(*args, **kwargs)
 
         self._label = QtWidgets.QLabel("Double Jeopardy")
+        self._label.setStyleSheet("QLabel {{ font-size: {}px; }}".format(
+            FONT_SIZE_DOUBLE))
+        self._label.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                                  QtWidgets.QSizePolicy.Fixed)
+        self._label.setAlignment(QtCore.Qt.AlignCenter)
 
         self._listWidget = QtWidgets.QListWidget()
         self._listWidget.itemSelectionChanged.connect(self.update_buttons)
@@ -26,10 +31,12 @@ class JeopardyDoubleWidget(QtWidgets.QWidget):
             self._listWidget.addItem(item)
 
         self._bet = QtWidgets.QSpinBox()
+        self._bet.setMinimum(0.5 * self._answer.get_points())
         self._bet.setMaximum(2 * self._answer.get_points())
         self._bet.setValue(self._answer.get_points())
         self._bet.setSingleStep(50)
-        # TODO: minimum?
+        self._bet.setStyleSheet("QSpinBox {{ font-size: {}px; }}".format(
+            FONT_SIZE_DOUBLE_BET))
 
         self._confirmButton = QtWidgets.QPushButton("Go!")
         self._confirmButton.clicked.connect(self.confirm)
