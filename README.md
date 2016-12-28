@@ -73,8 +73,6 @@ We recommend to test all answers before playing with people. If an image is
 missing it will not be displayed and there is no warning when the round is
 opened.
 
-**Note: the double jeopardy is not implemented at the moment.**
-
 License
 =======
 
